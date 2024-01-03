@@ -5,13 +5,13 @@ import {
   deletePlayer,
   deletePlayers,
   getPlayer,
-  getPlayers,
+  getAllPlayers,
   updatePlayer,
   updatePlayers,
 } from "../controllers/players";
 
 export default (router: express.Router) => {
-  router.get("/players", getPlayers);
+  router.get("/players", getAllPlayers);
   router.post("/players", addPlayer);
   router.put("/players", updatePlayers);
   router.delete("/players", deletePlayers);

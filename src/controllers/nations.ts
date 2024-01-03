@@ -1,12 +1,20 @@
 import express from "express";
+import {
+  createNation,
+  deleteNationById,
+  getNationById,
+  getNations,
+  updateNationById,
+} from "../models/nation";
 
-export const getNations = async (
+export const getAllNations = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) => {
   try {
-    return res.status(200).end("Will send all the nations to you!");
+    const nations = await getNations();
+    return res.status(200).json(nations);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -19,14 +27,10 @@ export const addNation = async (
   next: express.NextFunction
 ) => {
   try {
-    return res
-      .status(200)
-      .end(
-        "Will add the nation: " +
-          req.body.name +
-          " with details: " +
-          req.body.description
-      );
+    const newNation = await createNation(req.body);
+    if (newNation) {
+      return res.status(200).json(newNation);
+    } else return res.sendStatus(403).end("No request found!");
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -65,11 +69,10 @@ export const getNation = async (
   next: express.NextFunction
 ) => {
   try {
-    return res
-      .status(200)
-      .end(
-        "Will send details of the nation: " + req.params.nationId + " to you!"
-      );
+    const nation = await getNationById(req.params.nationId);
+    if (nation) {
+      return res.status(200).json(nation);
+    } else return res.sendStatus(403).end("No request found!");
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -97,15 +100,13 @@ export const updateNation = async (
   next: express.NextFunction
 ) => {
   try {
-    res.write("Updating the nation: " + req.params.nationId + "\n");
-    return res
-      .status(200)
-      .end(
-        "Will update the nation: " +
-          req.body.name +
-          " with details: " +
-          req.body.description
+    if (updateNation) {
+      const updatedNation = await updateNationById(
+        req.params.nationId,
+        req.body
       );
+      return res.status(200).json(updatedNation);
+    } else return res.sendStatus(403).end("No request found!");
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -118,7 +119,8 @@ export const deleteNation = async (
   next: express.NextFunction
 ) => {
   try {
-    return res.status(200).end("Deleting nation: " + req.params.nationId);
+    await deleteNationById(req.params.nationId);
+    return res.status(200).end("Deleted nation: " + req.params.nationId);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

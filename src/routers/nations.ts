@@ -5,13 +5,13 @@ import {
   deleteNation,
   deleteNations,
   getNation,
-  getNations,
+  getAllNations,
   updateNation,
   updateNations,
 } from "../controllers/nations";
 
 export default (router: express.Router) => {
-  router.get("/nations", getNations);
+  router.get("/nations", getAllNations);
   router.post("/nations", addNation);
   router.put("/nations", updateNations);
   router.delete("/nations", deleteNations);
