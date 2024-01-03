@@ -5,7 +5,7 @@ import {
   getNationById,
   getNations,
   updateNationById,
-} from "../models/nation";
+} from "../models/nations";
 
 export const getAllNations = async (
   req: express.Request,

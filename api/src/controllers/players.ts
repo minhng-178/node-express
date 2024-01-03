@@ -5,7 +5,7 @@ import {
   getPlayerById,
   getPlayers,
   updatePlayerById,
-} from "../models/player";
+} from "../models/players";
 
 export const getAllPlayers = async (
   req: express.Request,
