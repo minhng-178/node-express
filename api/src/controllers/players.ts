@@ -14,7 +14,7 @@ export const getAllPlayers = async (
 ) => {
   try {
     const players = await getPlayers();
-    return res.status(200).json(players);
+    return res.render("pages/players", { players: players });
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -27,13 +27,10 @@ export const addPlayer = async (
   next: express.NextFunction
 ) => {
   try {
-    const { nation_id } = req.body;
-    if (nation_id !== undefined) {
-      const newPlayer = await createPlayer(req.body);
-      if (newPlayer) {
-        return res.status(200).json(newPlayer);
-      } else return res.status(403).end("No request found!");
-    } else return res.status(400).end("Lack of nation_id");
+    const newPlayer = await createPlayer(req.body);
+    if (newPlayer) {
+      return res.status(200).json(newPlayer);
+    } else return res.status(403).end("No request found!");
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

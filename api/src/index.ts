@@ -1,5 +1,6 @@
 import http from "http";
 import cors from "cors";
+import path from "path";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import express from "express";
@@ -23,20 +24,6 @@ app.use(
 app.use(compression());
 app.use(bodyParser.json());
 
-const server = http.createServer(app);
-
-// app.use(
-//   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-//     res.statusCode = 200;
-//     res.setHeader("Content-Type", "text/html");
-//     res.end("<html><body><h1>This is an Express Server</h1></body></html>");
-//   }
-// );
-
-server.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
-
 const MONGODB_URI = process.env.MONGODB_URI!;
 
 if (MONGODB_URI) {
@@ -48,7 +35,21 @@ if (MONGODB_URI) {
 }
 
 app.use(morgan("dev"));
-app.use(express.static(__dirname + "/public"));
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(express.static(__dirname + "/publics"));
+
+app.get("/", function (req: express.Request, res: express.Response) {
+  res.render("pages/home");
+});
+
+// about page
 
 //Routes
-app.use("/api/", router());
+app.use("/", router());
+
+const server = http.createServer(app);
+
+server.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});

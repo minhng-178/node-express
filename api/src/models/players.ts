@@ -5,10 +5,10 @@ interface IPlayer extends Document {
   image: string;
   club: string;
   position: string;
-  goals: number;
-  isCaptain: boolean;
+  goals?: number;
+  isCaptain?: boolean;
   meta_data?: string;
-  nation_id: { type: Schema.Types.ObjectId; ref: "Nation" };
+  // nation_id: { type: Schema.Types.ObjectId; ref: "Nation" };
 }
 
 const PlayerSchema: Schema = new Schema({
@@ -16,10 +16,10 @@ const PlayerSchema: Schema = new Schema({
   image: { type: String, required: true },
   club: { type: String, required: true },
   position: { type: String, required: true },
-  goals: { type: Number, required: true },
-  isCaptain: { type: Boolean, required: true },
+  goals: { type: Number, required: false },
+  isCaptain: { type: Boolean, required: false },
   meta_data: { type: String, required: false },
-  nation_id: { type: Schema.Types.ObjectId, ref: "Nation", require: true },
+  // nation_id: { type: Schema.Types.ObjectId, ref: "Nation", require: true },
 });
 
 export const Player = mongoose.model<IPlayer>("Player", PlayerSchema);
