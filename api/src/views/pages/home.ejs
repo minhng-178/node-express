@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('../templates/head')-%>
-
+  <%- include('../partials/head')-%>
   <body>
-    <%- include('../templates/nav')-%>
-
     <main>
+      <%- include('../partials/nav')-%>
       <div class="container col-xxl-8 px-4 py-5">
-        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div
+          class="row flex-lg-row-reverse align-items-center g-5 py-5 bg-grey-50"
+        >
           <div class="col-10 col-sm-8 col-lg-6">
             <img
-              src="../../../public/hero.png"
+              src="https://res.cloudinary.com/dqqfmuomk/image/upload/v1704460108/hero_ikm0gk.png"
               class="d-block mx-lg-auto img-fluid"
               alt="Bootstrap Themes"
               width="700"
@@ -27,14 +27,17 @@
               players and coaches in our global community.
             </p>
             <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-              <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">
+              <button
+                type="button"
+                class="btn btn-bd-primary btn-lg px-4 me-md-2"
+              >
                 Explore now
               </button>
             </div>
           </div>
         </div>
       </div>
-      <%- include('../templates/footer')-%>
+      <%- include('../partials/footer')-%>
     </main>
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
@@ -46,10 +49,5 @@
       integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
       crossorigin="anonymous"
     ></script>
-    <script>
-      window.onload = function () {
-        document.getElementById("home").classList.add("active");
-      };
-    </script>
   </body>
 </html>

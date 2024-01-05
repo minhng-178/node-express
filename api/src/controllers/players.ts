@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  Player,
   createPlayer,
   deletePlayerById,
   getPlayerById,
@@ -28,8 +29,9 @@ export const addPlayer = async (
 ) => {
   try {
     const newPlayer = await createPlayer(req.body);
+
     if (newPlayer) {
-      return res.status(200).json(newPlayer);
+      res.redirect("/");
     } else return res.status(403).end("No request found!");
   } catch (error) {
     console.log(error);

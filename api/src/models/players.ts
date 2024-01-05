@@ -1,3 +1,4 @@
+import { Timestamp } from "mongodb";
 import mongoose, { Document, Schema } from "mongoose";
 
 interface IPlayer extends Document {
@@ -8,19 +9,24 @@ interface IPlayer extends Document {
   goals?: number;
   isCaptain?: boolean;
   meta_data?: string;
-  // nation_id: { type: Schema.Types.ObjectId; ref: "Nation" };
+  createdAt: Date;
+  updatedAt: Date;
+  nation_id: { type: Schema.Types.ObjectId; ref: "Nation" };
 }
 
-const PlayerSchema: Schema = new Schema({
-  name: { type: String, required: true },
-  image: { type: String, required: true },
-  club: { type: String, required: true },
-  position: { type: String, required: true },
-  goals: { type: Number, required: false },
-  isCaptain: { type: Boolean, required: false },
-  meta_data: { type: String, required: false },
-  // nation_id: { type: Schema.Types.ObjectId, ref: "Nation", require: true },
-});
+const PlayerSchema: Schema = new Schema(
+  {
+    name: { type: String, required: true },
+    // image: { type: String, required: true },
+    // club: { type: String, required: true },
+    // position: { type: String, required: true },
+    // goals: { type: Number, required: false },
+    // isCaptain: { type: Boolean, required: false },
+    // meta_data: { type: String, required: false },
+    // nation_id: { type: Schema.Types.ObjectId, ref: "Nation", require: true },
+  },
+  { timestamps: true }
+);
 
 export const Player = mongoose.model<IPlayer>("Player", PlayerSchema);
 

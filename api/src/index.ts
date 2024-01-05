@@ -7,6 +7,7 @@ import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import compression from "compression";
+import methodOverride from "method-override";
 
 import router from "./routers";
 
@@ -21,8 +22,17 @@ app.use(
   })
 );
 
+const server = http.createServer(app);
+
+server.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
+
+app.use(morgan("dev"));
 app.use(compression());
 app.use(bodyParser.json());
+app.use(methodOverride("_method"));
+app.use(express.urlencoded({ extended: true }));
 
 const MONGODB_URI = process.env.MONGODB_URI!;
 
@@ -34,22 +44,18 @@ if (MONGODB_URI) {
   throw new Error("Missing MongoDB connection string");
 }
 
-app.use(morgan("dev"));
+app.use(express.static("public"));
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-app.use(express.static(__dirname + "/publics"));
 
 app.get("/", function (req: express.Request, res: express.Response) {
+  res.render("pages/home");
+});
+
+app.get("/login", function (req: express.Request, res: express.Response) {
   res.render("pages/login");
 });
 
-// about page
-
 //Routes
 app.use("/", router());
-
-const server = http.createServer(app);
-
-server.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});

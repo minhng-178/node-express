@@ -1,34 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('../templates/head')-%>
+<%- include('../partials/head')-%>
+
   <body>
-    <%- include('../templates/nav')-%>
-    <form>
-      <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input
-          type="email"
-          class="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
-        />
-        <div id="emailHelp" class="form-text">
-          We'll never share your email with anyone else.
+    <main>
+      <%- include('../partials/nav')-%>
+        <div class="container col-xxl-8 px-4 py-5">
+          <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+            <div class="col-10 col-sm-8 col-lg-9">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Club</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% players.forEach(function(player){ %>
+                    <tr>
+                      <td>
+                        <figure >
+                          <img
+                          class="is-64x64"
+                          <img src=<%= player.image %> >
+                        </figure>
+                      </td>
+                      <td>
+                        <%= player.name %>
+                      </td>
+                      <td>
+                        <%= player.club %>
+                      </td>
+                      <td>
+                        <div class="buttons are-small">
+                          <button class="button is-warning is-light">Edit</button>
+                          <button class="button is-danger is-light">Delete</button>
+
+                        </div></a>
+                      </td>
+                    </tr>
+                    <% })%>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-lg-3">
+              <form action="/players" method="POST">
+                <div class="mb-3">
+                  <label for="playerName" class="form-label">Player name</label>
+                  <input type="text" class="form-control" id="pname" name="name" placeholder="e.g Messi" />
+                </div>
+
+                <button type="submit" class="btn btn-bd-primary">Submit</button>
+              </form>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          id="exampleInputPassword1"
-        />
-      </div>
-      <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+        <%- include('../partials/footer')-%>
+    </main>
   </body>
+
 </html>
