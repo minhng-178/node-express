@@ -40,7 +40,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(__dirname + "/publics"));
 
 app.get("/", function (req: express.Request, res: express.Response) {
-  res.render("pages/home");
+  res.render("pages/login");
 });
 
 // about page
