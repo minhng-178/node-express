@@ -11,18 +11,18 @@ interface IPlayer extends Document {
   meta_data?: string;
   createdAt: Date;
   updatedAt: Date;
-  nation_id: { type: Schema.Types.ObjectId; ref: "Nation" };
+  //nation_id: { type: Schema.Types.ObjectId; ref: "Nation" };
 }
 
 const PlayerSchema: Schema = new Schema(
   {
     name: { type: String, required: true },
-    // image: { type: String, required: true },
-    // club: { type: String, required: true },
-    // position: { type: String, required: true },
-    // goals: { type: Number, required: false },
-    // isCaptain: { type: Boolean, required: false },
-    // meta_data: { type: String, required: false },
+    image: { type: String, required: true },
+    club: { type: String, required: true },
+    position: { type: String, required: true },
+    goals: { type: Number, required: false },
+    isCaptain: { type: Boolean, required: false },
+    meta_data: { type: String, required: false },
     // nation_id: { type: Schema.Types.ObjectId, ref: "Nation", require: true },
   },
   { timestamps: true }
