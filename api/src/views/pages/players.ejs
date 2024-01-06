@@ -5,62 +5,103 @@
   <body>
     <main>
       <%- include('../partials/nav')-%>
-        <div class="container col-xxl-8 px-4 py-5">
-          <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
-            <div class="col-10 col-sm-8 col-lg-9">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Image</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Club</th>
-                    <th scope="col">Position</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% players.forEach(function(player,index){ %>
-
+        <div class="container col-xxl-12 pt-2 pb-5">
+          <div class="row flex-lg-row-reverse align-items-lg-start g-5">
+           <div class="col-12 col-lg-8">
+              <h4 class="section-title">Player List</h4>
+              <div class="table-wrapper">
+                <table class="table table-hover table-bordered">
+                  <thead>
                     <tr>
-                      <td>
-                        1
-                      </td>
-                      <td>
-                        <figure>
-                          <img class="is-64x64" src=<%=player.image %> >
-                        </figure>
-                      </td>
-                      <td>
-                        <%= player.name %>
-                      </td>
-                      <td>
-                        <%= player.club %>
-                      </td>
-                      <td>
-                        <%= player.position %>
-                      </td>
-                      <td>
-                        <div class="buttons are-small">
-                          <button class="btn btn-warning">Edit</button>
-                          <button class="btn btn-danger">Delete</button>
-
-                        </div></a>
-                      </td>
+                      <th scope="col">#</th>
+                      <th scope="col">Image</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Club</th>
+                      <th scope="col">Position</th>
+                      <th scope="col">Action</th>
                     </tr>
-                    <% })%>
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    <% players.forEach(function(player,index){ %>
+
+                      <tr>
+                        <td>
+                          <%= index + 1 %>
+                        </td>
+                        <td>
+                          <figure>
+                            <img class="table-img" src=<%=player.image %> >
+                          </figure>
+                        </td>
+                        <td>
+                          <%= player.name %>
+                        </td>
+                        <td>
+                          <%= player.club %>
+                        </td>
+                        <td>
+                          <%= player.position %>
+                        </td>
+                        <td>
+                          <div class="buttons are-small">
+                          <a href="/players/<%= player._id %>"><button  class="btn btn-warning">Edit</button></a>
+                            <button class="btn btn-danger">Delete</button>
+
+                          </div></a>
+                        </td>
+                      </tr>
+                      <% })%>
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class="col-lg-3">
-              <form action="/players" method="POST">
+           <div class="col-12 col-lg-4"> 
+              <h4 class="section-title">Create Player Form</h4>
+              <form action="/players" method="POST" class="form-bordered">
                 <div class="mb-3">
                   <label for="playerName" class="form-label">Player name</label>
                   <input type="text" class="form-control" id="pname" name="name" placeholder="e.g Messi" />
                 </div>
+                <div class="mb-3">
+                  <label for="imageURL" class="form-label">Image URL</label>
+                  <input type="text" class="form-control" id="pimage" name="image" />
+                </div>
+                <div class="mb-3">
+                  <label for="position" class="form-label">Position</label>
+                  <input type="text" class="form-control" id="pposition" name="position" />
+                </div>
 
-                <button type="submit" class="btn btn-bd-primary">Submit</button>
+                <div class="mb-3">
+                  <label for="club" class="form-label">Club name</label>
+                  <select class="form-select" name="club">
+                    <option selected>Open this select menu</option>
+                    <%for (let club of clubList){ %>
+                      <option value="<%= club.name %>">
+                        <%= club.name %>
+                      </option>
+                      <% } %>
+                  </select>
+                </div>
+
+                <button type="submit" class="btn btn-bd-primary w-100">Submit</button>
               </form>
+
+            </div>
+          </div>
+
+          <div aria-live="polite" aria-atomic="true" class="position-relative">
+            <div class="toast-container position-absolute top-0 end-0 p-3">
+              <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                  <img src="..." class="rounded me-2" alt="...">
+                  <strong class="me-auto">Bootstrap</strong>
+                  <small class="text-muted">just now</small>
+                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                  See? Just like this.
+                </div>
+              </div>
             </div>
           </div>
         </div>

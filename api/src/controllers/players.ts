@@ -1,12 +1,22 @@
 import express from "express";
 import {
-  Player,
   createPlayer,
   deletePlayerById,
   getPlayerById,
   getPlayers,
   updatePlayerById,
 } from "../models/players";
+
+const clubData = [
+  { id: "1", name: "Arsenal" },
+  { id: "2", name: "Manchester United" },
+  { id: "3", name: "Chelsea" },
+  { id: "4", name: "Manchester City" },
+  { id: "5", name: "PSG" },
+  { id: "6", name: "Inter Milan" },
+  { id: "7", name: "Real Madrid" },
+  { id: "8", name: "Barcelona" },
+];
 
 export const getAllPlayers = async (
   req: express.Request,
@@ -15,7 +25,10 @@ export const getAllPlayers = async (
 ) => {
   try {
     const players = await getPlayers();
-    return res.render("pages/players", { players: players });
+    return res.render("pages/players", {
+      players: players,
+      clubList: clubData,
+    });
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -31,7 +44,7 @@ export const addPlayer = async (
     const newPlayer = await createPlayer(req.body);
 
     if (newPlayer) {
-      res.redirect("/");
+      res.redirect("/players");
     } else return res.status(403).end("No request found!");
   } catch (error) {
     console.log(error);
@@ -72,7 +85,7 @@ export const getPlayer = async (
   try {
     const player = await getPlayerById(req.params.playerId);
     if (player) {
-      return res.status(200).json(player);
+      res.render("pages/player", { player: player, clubList: clubData });
     } else return res.status(403).end("No request found!");
   } catch (error) {
     console.log(error);
@@ -103,8 +116,8 @@ export const updatePlayer = async (
   try {
     const updatedPlayer = await updatePlayerById(req.params.playerId, req.body);
 
-    if (updatePlayer) {
-      return res.status(200).json(updatedPlayer);
+    if (updatedPlayer) {
+      res.redirect(`/player/${req.params.playerId}`);
     } else return res.status(403).end("No request found!");
   } catch (error) {
     console.log(error);
