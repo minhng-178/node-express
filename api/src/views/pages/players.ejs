@@ -45,11 +45,14 @@
                         <td>
                           <div class="buttons are-small">
                             <a href="/players/<%= player._id %>"><button class="btn btn-warning">Edit</button></a>
-                            <button class="btn btn-danger">Delete</button>
-
+                            <button class="btn btn-danger" data-bs-toggle="modal"
+                              data-bs-target="#deleteModal">Delete</button>
                           </div></a>
                         </td>
                       </tr>
+                      <form id="deleteForm" action="/players/<%= player._id %>" method="POST" style="display: none;">
+                        <input type="hidden" name="playerId" value="<%= player._id %>">
+                      </form>
                       <% })%>
                   </tbody>
                 </table>
@@ -82,15 +85,16 @@
                       <% } %>
                   </select>
                 </div>
-
                 <button type="submit" class="btn btn-bd-primary w-100">Submit</button>
               </form>
             </div>
           </div>
         </div>
         <%- include('../partials/footer')-%>
-
+          <!-- Toast -->
           <%- include('../partials/toast')-%>
+            <!-- Modal -->
+            <%- include('../partials/modal')-%>
     </main>
     <script>
       document.querySelector('form').addEventListener('submit', function (event) {

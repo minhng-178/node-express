@@ -132,7 +132,7 @@ export const deletePlayer = async (
 ) => {
   try {
     await deletePlayerById(req.params.playerId);
-    return res.status(200).end("Deleted player: " + req.params.playerId);
+    return res.redirect("/players");
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

@@ -41,8 +41,10 @@
                                     </div>
                                     <div class="row g-3">
                                         <div class="col">
-                                            <button type="submit" class="btn btn-bd-primary w-100">Update
-                                                Player</button>
+                                            <button type="submit" class="btn btn-bd-primary w-100"
+                                                data-bs-toggle="modal" data-bs-target="#updateModal">
+                                                Update player
+                                            </button>
                                         </div>
                                         <div class="col">
                                             <a href="/players" class="btn btn-light w-100">Cancel</a>
@@ -59,16 +61,24 @@
                         </div>
                     </div>
                 </div>
-                <%- include('../partials/footer')-%>
-                <%- include('../partials/toast')-%>
+
+                <!-- Modal -->
+                <%- include('../partials/modal')-%>
+
+                    <%- include('../partials/footer')-%>
+                        <!-- Toast -->
+                        <%- include('../partials/toast')-%>
         </main>
         <script>
+            var data;
             document.querySelector('form').addEventListener('submit', function (event) {
                 event.preventDefault();
 
                 var formData = new FormData(event.target);
-                var data = Object.fromEntries(formData);
+                data = Object.fromEntries(formData);
+            });
 
+            document.querySelector('#updateModal .btn-warning').addEventListener('click', function () {
                 fetch(`/players/${data._id}?_method=PUT`, {
                     method: 'POST',
                     headers: {
@@ -96,7 +106,6 @@
                     toast.show();
                 });
             });
-
         </script>
     </body>
 
