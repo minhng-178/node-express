@@ -117,7 +117,7 @@ export const updatePlayer = async (
     const updatedPlayer = await updatePlayerById(req.params.playerId, req.body);
 
     if (updatedPlayer) {
-      res.redirect(`/player/${req.params.playerId}`);
+      res.redirect(`/players/${req.params.playerId}`);
     } else return res.status(403).end("No request found!");
   } catch (error) {
     console.log(error);

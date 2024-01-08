@@ -31,7 +31,7 @@ const PlayerSchema: Schema = new Schema(
 export const Player = mongoose.model<IPlayer>("Player", PlayerSchema);
 
 //Player Actions
-export const getPlayers = () => Player.find();
+export const getPlayers = () => Player.find().sort({ createdAt: -1 });
 export const getPlayerByName = (name: string) => Player.findOne({ name });
 export const getPlayerById = (id: string) => Player.findById(id);
 export const createPlayer = (values: Record<string, any>) =>

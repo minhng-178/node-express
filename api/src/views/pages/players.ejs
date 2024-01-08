@@ -7,7 +7,7 @@
       <%- include('../partials/nav')-%>
         <div class="container col-xxl-12 pt-2 pb-5">
           <div class="row flex-lg-row-reverse align-items-lg-start g-5">
-           <div class="col-12 col-lg-8">
+            <div class="col-12 col-lg-8">
               <h4 class="section-title">Player List</h4>
               <div class="table-wrapper">
                 <table class="table table-hover table-bordered">
@@ -44,7 +44,7 @@
                         </td>
                         <td>
                           <div class="buttons are-small">
-                          <a href="/players/<%= player._id %>"><button  class="btn btn-warning">Edit</button></a>
+                            <a href="/players/<%= player._id %>"><button class="btn btn-warning">Edit</button></a>
                             <button class="btn btn-danger">Delete</button>
 
                           </div></a>
@@ -55,7 +55,7 @@
                 </table>
               </div>
             </div>
-           <div class="col-12 col-lg-4"> 
+            <div class="col-12 col-lg-4">
               <h4 class="section-title">Create Player Form</h4>
               <form action="/players" method="POST" class="form-bordered">
                 <div class="mb-3">
@@ -85,28 +85,51 @@
 
                 <button type="submit" class="btn btn-bd-primary w-100">Submit</button>
               </form>
-
-            </div>
-          </div>
-
-          <div aria-live="polite" aria-atomic="true" class="position-relative">
-            <div class="toast-container position-absolute top-0 end-0 p-3">
-              <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                  <img src="..." class="rounded me-2" alt="...">
-                  <strong class="me-auto">Bootstrap</strong>
-                  <small class="text-muted">just now</small>
-                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                  See? Just like this.
-                </div>
-              </div>
             </div>
           </div>
         </div>
         <%- include('../partials/footer')-%>
+
+          <%- include('../partials/toast')-%>
     </main>
+    <script>
+      document.querySelector('form').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        var formData = new FormData(event.target);
+        var data = Object.fromEntries(formData);
+
+        fetch('/players', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        }).then(response => {
+          var toastEl;
+          if (response.ok) {
+            toastEl = document.querySelector('#successToast');
+          } else {
+            toastEl = document.querySelector('#errorToast');
+          }
+          var toast = new bootstrap.Toast(toastEl);
+          toast.show();
+
+          if (response.ok) {
+            setTimeout(function () {
+              window.location.href = '/players';
+            }, 500);
+          }
+        }).catch(error => {
+          console.error('Error:', error);
+          var toastEl = document.querySelector('#errorToast');
+          var toast = new bootstrap.Toast(toastEl);
+          toast.show();
+        });
+      });
+
+
+    </script>
   </body>
 
 </html>
