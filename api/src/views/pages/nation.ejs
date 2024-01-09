@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head')-%>
+
+  <body>
+    <main>
+      <%- include('../partials/nav')-%>
+      <div class="container">
+        <div class="row">
+          <div class="mx-auto col-lg-6">
+            <h4 class="text-center mb-3">Edit Nation</h4>
+            <div class="form-bordered">
+              <form
+                action="/nations/<%= nation._id %>?_method=PUT"
+                method="POST"
+              >
+                <input type="hidden" name="_id" value="<%= nation._id %>" />
+                <div class="mb-3">
+                  <label for="nationName" class="form-label">Nation name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="pname"
+                    name="name"
+                    value="<%= nation.name %>"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="description" class="form-label"
+                    >Description</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="pdescription"
+                    name="description"
+                    value="<%= nation.description %>"
+                  />
+                </div>
+
+                <div class="row g-3">
+                  <div class="col">
+                    <button
+                      type="submit"
+                      class="btn btn-bd-primary w-100"
+                      data-bs-toggle="modal"
+                      data-bs-target="#updateModal"
+                    >
+                      Update nation
+                    </button>
+                  </div>
+                  <div class="col">
+                    <a href="/nations" class="btn btn-light w-100">Cancel</a>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%- include('../partials/footer')-%>
+
+      <!-- Modal -->
+      <%- include('../partials/modalNation')-%>
+
+      <!-- Toast -->
+      <%- include('../partials/toast')-%>
+    </main>
+    <script>
+      var data;
+      document
+        .querySelector("form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          var formData = new FormData(event.target);
+          data = Object.fromEntries(formData);
+        });
+
+      document
+        .querySelector("#updateModal .btn-warning")
+        .addEventListener("click", function () {
+          fetch(`/nations/${data._id}?_method=PUT`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => {
+              if (response.ok) {
+                var toastEl = document.querySelector("#successToast");
+              } else {
+                var toastEl = document.querySelector("#errorToast");
+              }
+              var toast = new bootstrap.Toast(toastEl);
+              toast.show();
+
+              if (response.ok) {
+                setTimeout(function () {
+                  window.location.href = `/nations/${data._id}`;
+                }, 500);
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              var toastEl = document.querySelector("#errorToast");
+              var toast = new bootstrap.Toast(toastEl);
+              toast.show();
+            });
+        });
+    </script>
+  </body>
+</html>
