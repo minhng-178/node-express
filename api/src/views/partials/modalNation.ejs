@@ -29,3 +29,47 @@
     </div>
   </div>
 </div>
+
+<!-- Delete modal nation-->
+<% nations.forEach(function(nation,index){ %>
+<div
+  class="modal fade"
+  id="deleteModal<%= nation._id %>"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="deleteModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deleteModalLabel">Delete nation</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete nation:
+        <strong><%= nation.name %></strong> ?
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-danger"
+          onclick="document.getElementById('deleteForm<%= nation._id %>').submit();"
+        >
+          Delete
+        </button>
+
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<% })%>

@@ -124,7 +124,7 @@ export const deleteNation = async (
 ) => {
   try {
     await deleteNationById(req.params.nationId);
-    return res.status(200).end("Deleted nation: " + req.params.nationId);
+    return res.redirect("/nations");
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

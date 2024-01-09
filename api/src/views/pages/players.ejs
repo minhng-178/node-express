@@ -1,159 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('../partials/head')-%>
-
+  <%- include('../partials/head')-%>
   <body>
     <main>
       <%- include('../partials/nav')-%>
-        <div class="container col-xxl-12 pt-2 pb-5">
-          <div class="row flex-lg-row-reverse align-items-lg-start g-5">
-            <div class="col-12 col-lg-8">
-              <h4 class="section-title">Player List</h4>
-              <div class="table-wrapper">
-                <table class="table table-hover table-bordered">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Image</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Club</th>
-                      <th scope="col">Position</th>
-                      <th scope="col">Goals</th>
-                      <th scope="col">Is Captain</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% players.forEach(function(player,index){ %>
-                      <tr>
-                        <td>
-                          <%= index + 1 %>
-                        </td>
-                        <td>
-                          <figure>
-                            <img class="table-img" src=<%=player.image %> >
-                          </figure>
-                        </td>
-                        <td>
-                          <%= player.name %>
-                        </td>
-                        <td>
-                          <%= player.club %>
-                        </td>
-                        <td>
-                          <%= player.position %>
-                        </td>
-                        <td>
-                          <%= player.goals %>
-                        </td>
-                        <td>
-                          <%= player.isCaptain %>
-                        </td>
+      <div class="container col-xxl-12 pt-2 pb-5">
+        <div class="row flex-lg-row-reverse align-items-lg-start g-5">
+          <div class="col-12 col-lg-8">
+            <h4 class="section-title">Player List</h4>
+            <div class="table-wrapper">
+              <table class="table table-hover table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Club</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">Goals</th>
+                    <th scope="col">Is Captain</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% players.forEach(function(player,index){ %>
+                  <tr>
+                    <td><%= index + 1 %></td>
+                    <td>
+                      <figure>
+                        <img class="table-img" src="<%" ="player.image" % /> >
+                      </figure>
+                    </td>
+                    <td><%= player.name %></td>
+                    <td><%= player.club %></td>
+                    <td><%= player.position %></td>
+                    <td><%= player.goals %></td>
+                    <td><%= player.isCaptain %></td>
 
-                        <td>
-                          <div class="buttons are-small">
-                            <a href="/players/<%= player._id %>"><button class="btn btn-warning">Edit</button></a>
-                            <button class="btn btn-danger" data-bs-toggle="modal"
-                              data-bs-target="#deleteModal<%= player._id %>">Delete</button>
-                          </div></a>
-                        </td>
-                      </tr>
-                      <form id="deleteForm<%= player._id %>" action="/players/<%= player._id %>?_method=DELETE"
-                        method="POST">
-                        <input type="hidden" name="playerId" value="<%= player._id %>">
-                      </form>
-                      <% })%>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div class="col-12 col-lg-4">
-              <h4 class="section-title">Create Player Form</h4>
-              <form action="/players" method="POST" class="form-bordered">
-                <div class="mb-3">
-                  <label for="playerName" class="form-label">Player name</label>
-                  <input type="text" class="form-control" id="pname" name="name" placeholder="e.g Messi" />
-                </div>
-                <div class="mb-3">
-                  <label for="imageURL" class="form-label">Image URL</label>
-                  <input type="text" class="form-control" id="pimage" name="image" />
-                </div>
-                <div class="mb-3">
-                  <label for="position" class="form-label">Position</label>
-                  <input type="text" class="form-control" id="pposition" name="position" />
-                </div>
-                <div class="mb-3">
-                  <label for="goals" class="form-label">Goals</label>
-                  <input type="text" class="form-control" id="pgoals" name="goals" />
-                </div>
-                <div class="mb-3">
-                  <label for="isCaptain" class="form-label">Is Captain ?</label>
-                  <div>
-                    <input class="form-check-input" type="radio" id="isCaptainYes" name="isCaptain" value="true">
-                    <label class="form-check-label" for="isCaptainYes">Yes</label>
-
-                    <input class="form-check-input" type="radio" id="isCaptainNo" name="isCaptain" value="false">
-                    <label class="form-check-label" for="isCaptainNo">No</label>
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <label for="club" class="form-label">Club name</label>
-                  <select class="form-select" name="club">
-                    <option selected>Open this select menu</option>
-                    <%for (let club of clubList){ %>
-                      <option value="<%= club.name %>">
-                        <%= club.name %>
-                      </option>
-                      <% } %>
-                  </select>
-                </div>
-                <button type="submit" class="btn btn-bd-primary w-100">Submit</button>
-              </form>
+                    <td>
+                      <div class="buttons are-small">
+                        <a href="/players/<%= player._id %>"
+                          ><button class="btn btn-warning">Edit</button></a
+                        >
+                        <button
+                          class="btn btn-danger"
+                          data-bs-toggle="modal"
+                          data-bs-target="#deleteModal<%= player._id %>"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <form
+                    id="deleteForm<%= player._id %>"
+                    action="/players/<%= player._id %>?_method=DELETE"
+                    method="POST"
+                  >
+                    <input
+                      type="hidden"
+                      name="playerId"
+                      value="<%= player._id %>"
+                    />
+                  </form>
+                  <% })%>
+                </tbody>
+              </table>
             </div>
           </div>
+          <div class="col-12 col-lg-4">
+            <h4 class="section-title">Create Player Form</h4>
+            <form action="/players" method="POST" class="form-bordered">
+              <div class="mb-3">
+                <label for="playerName" class="form-label">Player name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="pname"
+                  name="name"
+                  placeholder="e.g Messi"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="imageURL" class="form-label">Image URL</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="pimage"
+                  name="image"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="position" class="form-label">Position</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="pposition"
+                  name="position"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="goals" class="form-label">Goals</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="pgoals"
+                  name="goals"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="isCaptain" class="form-label">Is Captain ?</label>
+                <div>
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="isCaptainYes"
+                    name="isCaptain"
+                    value="true"
+                  />
+                  <label class="form-check-label" for="isCaptainYes">Yes</label>
+
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="isCaptainNo"
+                    name="isCaptain"
+                    value="false"
+                  />
+                  <label class="form-check-label" for="isCaptainNo">No</label>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="club" class="form-label">Club name</label>
+                <select class="form-select" name="club">
+                  <option selected>Open this select menu</option>
+                  <%for (let club of clubList){ %>
+                  <option value="<%= club.name %>"><%= club.name %></option>
+                  <% } %>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-bd-primary w-100">
+                Submit
+              </button>
+            </form>
+          </div>
         </div>
-        <%- include('../partials/footer')-%>
-          <!-- Toast -->
-          <%- include('../partials/toast')-%>
-            <!-- Modal -->
-            <%- include('../partials/modal')-%>
+      </div>
+      <%- include('../partials/footer')-%>
+      <!-- Toast -->
+      <%- include('../partials/toast')-%>
+      <!-- Modal -->
+      <%- include('../partials/modal')-%>
     </main>
     <script>
-      document.querySelector('form').addEventListener('submit', function (event) {
-        event.preventDefault();
+      document
+        .querySelector("form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
 
-        var formData = new FormData(event.target);
-        var data = Object.fromEntries(formData);
+          var formData = new FormData(event.target);
+          var data = Object.fromEntries(formData);
 
-        fetch('/players', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        }).then(response => {
-          var toastEl;
-          if (response.ok) {
-            toastEl = document.querySelector('#successToast');
-          } else {
-            toastEl = document.querySelector('#errorToast');
-          }
-          var toast = new bootstrap.Toast(toastEl);
-          toast.show();
+          fetch("/players", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => {
+              var toastEl;
+              if (response.ok) {
+                toastEl = document.querySelector("#successToast");
+              } else {
+                toastEl = document.querySelector("#errorToast");
+              }
+              var toast = new bootstrap.Toast(toastEl);
+              toast.show();
 
-          if (response.ok) {
-            setTimeout(function () {
-              window.location.href = '/players';
-            }, 500);
-          }
-        }).catch(error => {
-          console.error('Error:', error);
-          var toastEl = document.querySelector('#errorToast');
-          var toast = new bootstrap.Toast(toastEl);
-          toast.show();
+              if (response.ok) {
+                setTimeout(function () {
+                  window.location.href = "/players";
+                }, 500);
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              var toastEl = document.querySelector("#errorToast");
+              var toast = new bootstrap.Toast(toastEl);
+              toast.show();
+            });
         });
-      });
     </script>
   </body>
-
 </html>
