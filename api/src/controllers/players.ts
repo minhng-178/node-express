@@ -84,8 +84,13 @@ export const getPlayer = async (
 ) => {
   try {
     const player = await getPlayerById(req.params.playerId);
+    const players = await getPlayers();
     if (player) {
-      res.render("pages/player", { player: player, clubList: clubData });
+      res.render("pages/player", {
+        player: player,
+        players: players,
+        clubList: clubData,
+      });
     } else return res.status(403).end("No request found!");
   } catch (error) {
     console.log(error);

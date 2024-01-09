@@ -4,18 +4,25 @@ interface INation extends Document {
   name: string;
   description: string;
   meta_data?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const NationSchema: Schema = new Schema({
-  name: { type: String, required: true },
-  description: { type: String, required: true },
-  meta_data: { type: String, required: false },
-});
+const NationSchema: Schema = new Schema(
+  {
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    meta_data: { type: String, required: false },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 export const Nation = mongoose.model<INation>("Nation", NationSchema);
 
 //Nation Actions
-export const getNations = () => Nation.find();
+export const getNations = () => Nation.find().sort({ createdAt: -1 });
 export const getNationByName = (name: string) => Nation.findOne({ name });
 export const getNationById = (id: string) => Nation.findById(id);
 export const createNation = (values: Record<string, any>) =>

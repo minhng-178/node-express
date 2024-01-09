@@ -6,6 +6,7 @@ import {
   getNations,
   updateNationById,
 } from "../models/nations";
+import { getPlayers } from "../models/players";
 
 export const getAllNations = async (
   req: express.Request,
@@ -14,7 +15,9 @@ export const getAllNations = async (
 ) => {
   try {
     const nations = await getNations();
-    return res.status(200).json(nations);
+    return res.render("pages/nations", {
+      nations: nations,
+    });
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -70,8 +73,9 @@ export const getNation = async (
 ) => {
   try {
     const nation = await getNationById(req.params.nationId);
+    const nations = await getNations();
     if (nation) {
-      return res.status(200).json(nation);
+      return res.render("pages/nation", { nation: nation, nations: nations });
     } else return res.sendStatus(403).end("No request found!");
   } catch (error) {
     console.log(error);

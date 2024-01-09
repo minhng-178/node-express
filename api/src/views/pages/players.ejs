@@ -18,12 +18,13 @@
                       <th scope="col">Name</th>
                       <th scope="col">Club</th>
                       <th scope="col">Position</th>
+                      <th scope="col">Goals</th>
+                      <th scope="col">Is Captain</th>
                       <th scope="col">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     <% players.forEach(function(player,index){ %>
-
                       <tr>
                         <td>
                           <%= index + 1 %>
@@ -43,14 +44,22 @@
                           <%= player.position %>
                         </td>
                         <td>
+                          <%= player.goals %>
+                        </td>
+                        <td>
+                          <%= player.isCaptain %>
+                        </td>
+
+                        <td>
                           <div class="buttons are-small">
                             <a href="/players/<%= player._id %>"><button class="btn btn-warning">Edit</button></a>
                             <button class="btn btn-danger" data-bs-toggle="modal"
-                              data-bs-target="#deleteModal">Delete</button>
+                              data-bs-target="#deleteModal<%= player._id %>">Delete</button>
                           </div></a>
                         </td>
                       </tr>
-                      <form id="deleteForm" action="/players/<%= player._id %>" method="POST" style="display: none;">
+                      <form id="deleteForm<%= player._id %>" action="/players/<%= player._id %>?_method=DELETE"
+                        method="POST">
                         <input type="hidden" name="playerId" value="<%= player._id %>">
                       </form>
                       <% })%>
@@ -73,7 +82,20 @@
                   <label for="position" class="form-label">Position</label>
                   <input type="text" class="form-control" id="pposition" name="position" />
                 </div>
+                <div class="mb-3">
+                  <label for="goals" class="form-label">Goals</label>
+                  <input type="text" class="form-control" id="pgoals" name="goals" />
+                </div>
+                <div class="mb-3">
+                  <label for="isCaptain" class="form-label">Is Captain ?</label>
+                  <div>
+                    <input class="form-check-input" type="radio" id="isCaptainYes" name="isCaptain" value="true">
+                    <label class="form-check-label" for="isCaptainYes">Yes</label>
 
+                    <input class="form-check-input" type="radio" id="isCaptainNo" name="isCaptain" value="false">
+                    <label class="form-check-label" for="isCaptainNo">No</label>
+                  </div>
+                </div>
                 <div class="mb-3">
                   <label for="club" class="form-label">Club name</label>
                   <select class="form-select" name="club">
@@ -131,8 +153,6 @@
           toast.show();
         });
       });
-
-
     </script>
   </body>
 
