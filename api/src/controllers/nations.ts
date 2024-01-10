@@ -32,7 +32,7 @@ export const addNation = async (
   try {
     const newNation = await createNation(req.body);
     if (newNation) {
-      return res.status(200).json(newNation);
+      return res.redirect("/nations");
     } else return res.sendStatus(403).end("No request found!");
   } catch (error) {
     console.log(error);

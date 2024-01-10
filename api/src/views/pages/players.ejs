@@ -4,7 +4,7 @@
   <body>
     <main>
       <%- include('../partials/nav')-%>
-      <div class="container col-xxl-12 pt-2 pb-5">
+      <div class="container col-xxl-12 pt-2">
         <div class="row flex-lg-row-reverse align-items-lg-start g-5">
           <div class="col-12 col-lg-8">
             <h4 class="section-title">Player List</h4>
@@ -28,7 +28,7 @@
                     <td><%= index + 1 %></td>
                     <td>
                       <figure>
-                        <img class="table-img" src="<%" ="player.image" % /> >
+                        <img class="table-img" src="<%= player.image %>" />
                       </figure>
                     </td>
                     <td><%= player.name %></td>
