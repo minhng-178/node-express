@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head')-%>
+    <body>
+        <main>
+            <%- include('../partials/nav')-%>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h4 class="text-center mb-3">Edit Player</h4>
+                            <div class="form-bordered">
+                                <form action="/orchids/<%= orchid._id %>?_method=PUT" method="POST">
+                                    <input type="hidden" name="_id" value="<%= orchid._id %>">
+                                    <div class="mb-3">
+                                      <label for="orchidName" class="form-label">Orchid Name</label>
+                                      <input type="text" class="form-control" id="oname" name="name" value="<%= orchid.name %>" />
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="imageURL" class="form-label">Image URL</label>
+                                      <input type="text" class="form-control" id="oimage" name="image" value="<%= orchid.image %>" />
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="color" class="form-label">Color</label>
+                                      <input type="text" class="form-control" id="ocolor" name="color" value="<%= orchid.color %>" />
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="original" class="form-label">Original</label>
+                                      <input type="text" class="form-control" id="ooriginal" name="original" value="<%= orchid.original %>" />
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="price" class="form-label">Price</label>
+                                      <input type="number" class="form-control" id="oprice" name="price" value="<%= orchid.price %>" />
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="isNatural" class="form-label">Is Natural?</label>
+                                      <div>
+                                        <input class="form-check-input" type="radio" id="isNaturalYes" name="isNatural" value="true" <%=orchid.isNatural ? 'checked' : '' %>>
+                                        <label class="form-check-label" for="isNaturalYes">Yes</label>
+                                  
+                                        <input class="form-check-input" type="radio" id="isNaturalNo" name="isNatural" value="false" <%=!orchid.isNatural ? 'checked' : '' %>>
+                                        <label class="form-check-label" for="isNaturalNo">No</label>
+                                      </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="original" class="form-label">Original name</label>
+                                        <select class="form-select" name="original">
+                                            <%for (let original of originalList){ %>
+                                                <option value="<%= original.name %>"
+                                                    <%=JSON.stringify(original.name)===JSON.stringify(orchid.original)
+                                                    ? 'selected' : '' %>>
+                                                    <%= original.name %>
+                                                </option>
+                                                <%}%>
+                                        </select>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col">
+                                            <button type="submit" class="btn btn-bd-primary w-100"
+                                                data-bs-toggle="modal" data-bs-target="#updateModal">
+                                                Update orchid
+                                            </button>
+                                        </div>
+                                        <div class="col">
+                                            <a href="/orchids" class="btn btn-light w-100">Cancel</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <h4 class="section-title">Orchid Image</h4>
+                            <div id="image-container">
+                                <img id="orchid-image" src="<%= orchid.image %>" alt="Orchid image" class="img-section">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <%- include('../partials/modal')-%>
+
+                    <%- include('../partials/footer')-%>
+                        <!-- Toast -->
+                        <%- include('../partials/toast')-%>
+        </main>
+        <script>
+            var data;
+            document.querySelector('form').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                var formData = new FormData(event.target);
+                data = Object.fromEntries(formData);
+            });
+
+            document.querySelector('#updateModal .btn-warning').addEventListener('click', function () {
+                fetch(`/orchids/${data._id}?_method=PUT`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => {
+                    if (response.ok) {
+                        var toastEl = document.querySelector('#successToast');
+                    } else {
+                        var toastEl = document.querySelector('#errorToast');
+                    }
+                    var toast = new bootstrap.Toast(toastEl);
+                    toast.show();
+
+                    if (response.ok) {
+                        setTimeout(function () {
+                            window.location.href = `/orchids/${data._id}`;
+                        }, 500);
+                    }
+                }).catch(error => {
+                    console.error('Error:', error);
+                    var toastEl = document.querySelector('#errorToast');
+                    var toast = new bootstrap.Toast(toastEl);
+                    toast.show();
+                });
+            });
+        </script>
+    </body>
+</html>

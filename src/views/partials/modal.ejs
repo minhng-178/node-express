@@ -1,4 +1,4 @@
-<!-- Update modal player-->
+<!-- Update modal orchid-->
 <div
   class="modal fade"
   id="updateModal"
@@ -30,11 +30,11 @@
   </div>
 </div>
 
-<!-- Delete modal player-->
-<% players.forEach(function(player,index){ %>
+<!-- Delete modal orchid-->
+<% orchids.forEach(function(orchid,index){ %>
 <div
   class="modal fade"
-  id="deleteModal<%= player._id %>"
+  id="deleteModal<%= orchid._id %>"
   data-bs-backdrop="static"
   data-bs-keyboard="false"
   tabindex="-1"
@@ -44,7 +44,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="deleteModalLabel">Delete Player</h1>
+        <h1 class="modal-title fs-5" id="deleteModalLabel">Delete Orchid</h1>
         <button
           type="button"
           class="btn-close"
@@ -53,14 +53,14 @@
         ></button>
       </div>
       <div class="modal-body">
-        Are you sure you want to delete Player:
-        <strong><%= player.name %></strong> ?
+        Are you sure you want to delete Orchid:
+        <strong><%= orchid.name %></strong> ?
       </div>
       <div class="modal-footer">
         <button
           type="button"
           class="btn btn-danger"
-          onclick="document.getElementById('deleteForm<%= player._id %>').submit();"
+          onclick="document.getElementById('deleteForm<%= orchid._id %>').submit();"
         >
           Delete
         </button>

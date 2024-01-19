@@ -10,6 +10,7 @@ import compression from "compression";
 import methodOverride from "method-override";
 
 import router from "./routers";
+import { originalData } from "./controllers/orchids";
 
 dotenv.config();
 
@@ -55,6 +56,10 @@ app.get("/", function (req: express.Request, res: express.Response) {
 
 app.get("/login", function (req: express.Request, res: express.Response) {
   res.render("pages/login");
+});
+
+app.get("/orchidForm", function (req: express.Request, res: express.Response) {
+  res.render("pages/orchidForm", { originalList: originalData });
 });
 
 //Routes
