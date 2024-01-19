@@ -69,12 +69,10 @@ export const getCategory = async (
   next: express.NextFunction
 ) => {
   try {
-    const Category = await getCategoryById(req.params.CategoryId);
+    const Category = await getCategoryById(req.params.categoryId);
 
     if (Category) {
-      return res
-        .status(200)
-        .end(`Get category by ID: ${req.params.CategoryId}`);
+      return res.status(200).json(Category);
     } else return res.sendStatus(403).end("No request found!");
   } catch (error) {
     console.log(error);
@@ -91,7 +89,7 @@ export const addCategoryWithId = async (
     return res
       .status(403)
       .end(
-        "POST operation not supported on /Category/" + req.params.CategoryId
+        "POST operation not supported on /category/" + req.params.categoryId
       );
   } catch (error) {
     console.log(error);
@@ -105,11 +103,11 @@ export const updateCategory = async (
   next: express.NextFunction
 ) => {
   try {
-    if (updateCategory) {
-      const updatedCategory = await updateCategoryById(
-        req.params.CategoryId,
-        req.body
-      );
+    const updatedCategory = await updateCategoryById(
+      req.params.categoryId,
+      req.body
+    );
+    if (updatedCategory) {
       return res.status(200).json(updatedCategory);
     } else return res.sendStatus(403).end("No request found!");
   } catch (error) {

@@ -10,7 +10,7 @@ interface ICategory extends Document {
 
 const CategorySchema: Schema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
     description: { type: String, required: true },
     meta_data: { type: String, required: false },
   },

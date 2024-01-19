@@ -28,12 +28,6 @@ server.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
 
-app.use(morgan("dev"));
-app.use(compression());
-app.use(bodyParser.json());
-app.use(methodOverride("_method"));
-app.use(express.urlencoded({ extended: true }));
-
 const MONGODB_URI = process.env.MONGODB_URI!;
 
 if (MONGODB_URI) {
@@ -43,6 +37,12 @@ if (MONGODB_URI) {
 } else {
   throw new Error("Missing MongoDB connection string");
 }
+
+app.use(morgan("dev"));
+app.use(compression());
+app.use(bodyParser.json());
+app.use(methodOverride("_method"));
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 

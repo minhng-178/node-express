@@ -1,33 +1,34 @@
 import express from "express";
-import {
-  createPlayer,
-  deletePlayerById,
-  getPlayerById,
-  getPlayers,
-  updatePlayerById,
-} from "../models/players";
 
-const clubData = [
-  { id: "1", name: "Arsenal" },
-  { id: "2", name: "Manchester United" },
-  { id: "3", name: "Chelsea" },
-  { id: "4", name: "Manchester City" },
-  { id: "5", name: "PSG" },
-  { id: "6", name: "Inter Milan" },
-  { id: "7", name: "Real Madrid" },
-  { id: "8", name: "Barcelona" },
+import {
+  createOrchid,
+  deleteOrchidById,
+  getOrchidById,
+  getOrchids,
+  updateOrchidById,
+} from "../models/orchids";
+
+const originalData = [
+  { id: "1", name: "Viet Nam" },
+  { id: "2", name: "Thailand" },
+  { id: "3", name: "Laos" },
+  { id: "4", name: "China" },
+  { id: "5", name: "Japan" },
+  { id: "6", name: "UAE" },
+  { id: "7", name: "Korea" },
+  { id: "8", name: "HongKong" },
 ];
 
-export const getAllPlayers = async (
+export const getAllOrchids = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) => {
   try {
-    const players = await getPlayers();
-    return res.render("pages/players", {
-      players: players,
-      clubList: clubData,
+    const orchids = await getOrchids();
+    return res.render("pages/orchids", {
+      orchids: orchids,
+      originalList: originalData,
     });
   } catch (error) {
     console.log(error);
@@ -35,16 +36,16 @@ export const getAllPlayers = async (
   }
 };
 
-export const addPlayer = async (
+export const addOrchid = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) => {
   try {
-    const newPlayer = await createPlayer(req.body);
+    const newOrchid = await createOrchid(req.body);
 
-    if (newPlayer) {
-      res.redirect("/players");
+    if (newOrchid) {
+      res.redirect("/orchids");
     } else return res.status(403).end("No request found!");
   } catch (error) {
     console.log(error);
@@ -52,45 +53,45 @@ export const addPlayer = async (
   }
 };
 
-export const updatePlayers = async (
+export const updateOrchids = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) => {
   try {
-    return res.status(403).end("PUT operation not supported on /players");
+    return res.status(403).end("PUT operation not supported on /orchids");
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
   }
 };
 
-export const deletePlayers = async (
+export const deleteOrchids = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) => {
   try {
-    return res.status(403).end("Deleting all players");
+    return res.status(403).end("Deleting all orchids");
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
   }
 };
 
-export const getPlayer = async (
+export const getOrchid = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) => {
   try {
-    const player = await getPlayerById(req.params.playerId);
-    const players = await getPlayers();
-    if (player) {
-      res.render("pages/player", {
-        player: player,
-        players: players,
-        clubList: clubData,
+    const Orchid = await getOrchidById(req.params.OrchidId);
+    const Orchids = await getOrchids();
+    if (Orchid) {
+      res.render("pages/Orchid", {
+        Orchid: Orchid,
+        Orchids: Orchids,
+        originalList: originalData,
       });
     } else return res.status(403).end("No request found!");
   } catch (error) {
@@ -99,7 +100,7 @@ export const getPlayer = async (
   }
 };
 
-export const addPlayerWithId = async (
+export const addOrchidWithId = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -107,23 +108,23 @@ export const addPlayerWithId = async (
   try {
     return res
       .status(403)
-      .end("POST operation not supported on /players/" + req.params.PlayerId);
+      .end("POST operation not supported on /orchids/" + req.params.orchidId);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
   }
 };
 
-export const updatePlayer = async (
+export const updateOrchid = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) => {
   try {
-    const updatedPlayer = await updatePlayerById(req.params.playerId, req.body);
+    const updatedOrchid = await updateOrchidById(req.params.orchidId, req.body);
 
-    if (updatedPlayer) {
-      res.redirect(`/players/${req.params.playerId}`);
+    if (updatedOrchid) {
+      res.redirect(`/orchids/${req.params.orchidId}`);
     } else return res.status(403).end("No request found!");
   } catch (error) {
     console.log(error);
@@ -131,14 +132,14 @@ export const updatePlayer = async (
   }
 };
 
-export const deletePlayer = async (
+export const deleteOrchid = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) => {
   try {
-    await deletePlayerById(req.params.playerId);
-    return res.redirect("/players");
+    await deleteOrchidById(req.params.orchidId);
+    return res.redirect("/Orchids");
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
