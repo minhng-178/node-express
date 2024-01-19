@@ -4,13 +4,13 @@ import path from "path";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import express from "express";
-import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import compression from "compression";
 import methodOverride from "method-override";
 
 import router from "./routers";
 import { originalData } from "./controllers/orchids";
+import { connectDB } from "./db/index";
 
 dotenv.config();
 
@@ -29,15 +29,8 @@ server.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
 
-const MONGODB_URI = process.env.MONGODB_URI!;
-
-if (MONGODB_URI) {
-  mongoose.Promise = Promise;
-  mongoose.connect(MONGODB_URI).then(() => console.log("Connected to MongoDB"));
-  mongoose.connection.on("error", (error: Error) => console.log(error));
-} else {
-  throw new Error("Missing MongoDB connection string");
-}
+// Connect to MongoDB
+connectDB();
 
 app.use(morgan("dev"));
 app.use(compression());
@@ -64,3 +57,16 @@ app.get("/orchidForm", function (req: express.Request, res: express.Response) {
 
 //Routes
 app.use("/", router());
+
+// Global error handler
+app.use(
+  (
+    err: express.Errback,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    console.error(err);
+    res.status(500).send("Something broke!");
+  }
+);
