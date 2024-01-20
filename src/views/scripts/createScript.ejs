@@ -1,0 +1,103 @@
+<script>
+  document.querySelector("form").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    var validationRules = {
+      oname: {
+        test: function (value) {
+          return value !== "";
+        },
+        message: "Orchid Name is required",
+      },
+      oimage: {
+        test: function (value) {
+          return value !== "";
+        },
+        message: "Image URL is required",
+      },
+      ocolor: {
+        test: function (value) {
+          return value !== "";
+        },
+        message: "Color is required",
+      },
+      oprice: {
+        test: function (value) {
+          return value !== "" && !isNaN(value) && value >= 0;
+        },
+        message: "Invalid Price",
+      },
+      isNatural: {
+        test: function () {
+          return (
+            document.getElementById("isNaturalYes").checked ||
+            document.getElementById("isNaturalNo").checked
+          );
+        },
+        message: "Please select whether the orchid is natural or not",
+      },
+      ooriginal: {
+        test: function (value) {
+          return value !== "Open this select menu";
+        },
+        message: "Please select an Original name",
+      },
+    };
+
+    var isValid = true;
+
+    function showError(id, message) {
+      document.getElementById(id + "Error").textContent = message;
+      isValid = false;
+    }
+
+    for (var id in validationRules) {
+      var value = id === "isNatural" ? null : document.getElementById(id).value;
+      if (!validationRules[id].test(value)) {
+        showError(id, validationRules[id].message);
+      } else {
+        // If the field is valid, clear the error message
+        showError(id, "");
+      }
+    }
+
+    if (isValid) {
+      submitForm(event.target);
+    }
+  });
+
+  function submitForm(form) {
+    var formData = new FormData(form);
+    var data = Object.fromEntries(formData);
+
+    fetch("/orchids", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        var toastEl;
+        if (response.ok) {
+          toastEl = document.querySelector("#successToast");
+        } else {
+          toastEl = document.querySelector("#errorToast");
+        }
+        var toast = new bootstrap.Toast(toastEl);
+        toast.show();
+
+        if (response.ok) {
+          setTimeout(function () {
+            window.location.href = "/orchids";
+          }, 500);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        var toastEl = document.querySelector("#errorToast");
+        var toast = new bootstrap.Toast(toastEl);
+        toast.show();
+      });
+  }
+</script>

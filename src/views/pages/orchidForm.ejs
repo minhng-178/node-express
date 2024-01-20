@@ -18,6 +18,7 @@
                   name="name"
                   placeholder="e.g. Phalaenopsis amabilis"
                 />
+                <span id="onameError" class="text-danger"></span>
               </div>
               <div class="mb-3">
                 <label for="imageURL" class="form-label">Image URL</label>
@@ -27,6 +28,7 @@
                   id="oimage"
                   name="image"
                 />
+                <span id="oimageError" class="text-danger"></span>
               </div>
               <div class="mb-3">
                 <label for="color" class="form-label">Color</label>
@@ -36,6 +38,7 @@
                   id="ocolor"
                   name="color"
                 />
+                <span id="ocolorError" class="text-danger"></span>
               </div>
               <div class="mb-3">
                 <label for="price" class="form-label">Price</label>
@@ -45,6 +48,7 @@
                   id="oprice"
                   name="price"
                 />
+                <span id="opriceError" class="text-danger"></span>
               </div>
               <div class="mb-3">
                 <label for="isNatural" class="form-label">Is Natural?</label>
@@ -57,7 +61,6 @@
                     value="true"
                   />
                   <label class="form-check-label" for="isNaturalYes">Yes</label>
-
                   <input
                     class="form-check-input"
                     type="radio"
@@ -67,10 +70,11 @@
                   />
                   <label class="form-check-label" for="isNaturalNo">No</label>
                 </div>
+                <span id="isNaturalError" class="text-danger"></span>
               </div>
               <div class="mb-3">
                 <label for="original" class="form-label">Original name</label>
-                <select class="form-select" name="original">
+                <select class="form-select" name="original" id="ooriginal">
                   <option selected>Open this select menu</option>
                   <%for (let original of originalList){ %>
                   <option value="<%= original.name %>">
@@ -78,6 +82,7 @@
                   </option>
                   <% } %>
                 </select>
+                <span id="ooriginalError" class="text-danger"></span>
               </div>
               <button type="submit" class="btn btn-bd-primary w-100">
                 Submit
@@ -91,45 +96,6 @@
       <%- include('../partials/toast')-%>
       <!-- Modal -->
     </main>
-    <script>
-      document
-        .querySelector("form")
-        .addEventListener("submit", function (event) {
-          event.preventDefault();
-
-          var formData = new FormData(event.target);
-          var data = Object.fromEntries(formData);
-
-          fetch("/orchids", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          })
-            .then((response) => {
-              var toastEl;
-              if (response.ok) {
-                toastEl = document.querySelector("#successToast");
-              } else {
-                toastEl = document.querySelector("#errorToast");
-              }
-              var toast = new bootstrap.Toast(toastEl);
-              toast.show();
-
-              if (response.ok) {
-                setTimeout(function () {
-                  window.location.href = "/orchids";
-                }, 500);
-              }
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-              var toastEl = document.querySelector("#errorToast");
-              var toast = new bootstrap.Toast(toastEl);
-              toast.show();
-            });
-        });
-    </script>
+    <%- include('../scripts/createScript')-%>
   </body>
 </html>
