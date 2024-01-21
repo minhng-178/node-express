@@ -42,13 +42,15 @@ export const getAllOrchids = async (
     return res.sendStatus(500);
   }
 };
-
 export const addOrchid = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) => {
   try {
+    // Use the file URL from the hidden input field
+    req.body.image = req.body.fileURL;
+
     const newOrchid = await createOrchid(req.body);
 
     if (newOrchid) {

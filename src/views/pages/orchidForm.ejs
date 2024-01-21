@@ -21,14 +21,16 @@
                 <span id="onameError" class="text-danger"></span>
               </div>
               <div class="mb-3">
-                <label for="imageURL" class="form-label">Image URL</label>
+                <label for="imageURL" class="form-label">Image</label>
                 <input
-                  type="text"
+                  type="file"
                   class="form-control"
                   id="oimage"
-                  name="image"
+                  name="file"
+                  accept="image/png, image/jpeg"
                 />
                 <span id="oimageError" class="text-danger"></span>
+                <input type="hidden" id="hiddenFileURL" name="image" />
               </div>
               <div class="mb-3">
                 <label for="color" class="form-label">Color</label>

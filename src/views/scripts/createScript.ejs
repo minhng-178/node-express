@@ -13,7 +13,7 @@
         test: function (value) {
           return value !== "";
         },
-        message: "Image URL is required",
+        message: "Image File is required",
       },
       ocolor: {
         test: function (value) {
@@ -66,12 +66,25 @@
     }
 
     if (isValid) {
-      submitForm(event.target);
+      uploadFile(event.target);
     }
   });
 
-  function submitForm(form) {
+  function uploadFile(form) {
     var formData = new FormData(form);
+    fetch("/upload", { method: "POST", body: formData })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.fileURL) {
+          document.querySelector("#hiddenFileURL").value = result.fileURL;
+          formData.set("image", result.fileURL);
+          submitForm(form, formData);
+        }
+      })
+      .catch((error) => console.error("Error:", error));
+  }
+
+  function submitForm(form, formData) {
     var data = Object.fromEntries(formData);
 
     fetch("/orchids", {

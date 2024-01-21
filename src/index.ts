@@ -9,7 +9,8 @@ import compression from "compression";
 import methodOverride from "method-override";
 
 import router from "./routers";
-import { connectDB } from "./db/index";
+import { connectDB } from "./configs/db";
+import { uploadCloud } from "./configs/cloudinary";
 
 dotenv.config();
 
@@ -48,6 +49,18 @@ app.get("/", function (req: express.Request, res: express.Response) {
 
 app.get("/login", function (req: express.Request, res: express.Response) {
   res.render("pages/login");
+});
+
+app.post("/upload", uploadCloud.single("file"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send("No file uploaded.");
+  }
+
+  const fileURL = req.file.path;
+
+  return res
+    .status(200)
+    .send({ message: "File uploaded successfully.", fileURL });
 });
 
 //Routes
