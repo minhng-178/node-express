@@ -156,3 +156,16 @@ export const deleteOrchid = async (
     return res.sendStatus(500);
   }
 };
+
+export const createFormOrchid = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    res.render("pages/orchidForm", { originalList: originalData });
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+};

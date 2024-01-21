@@ -47,8 +47,13 @@
     var isValid = true;
 
     function showError(id, message) {
-      document.getElementById(id + "Error").textContent = message;
-      isValid = false;
+      var errorMessageElement = document.getElementById(id + "Error");
+      if (message) {
+        errorMessageElement.textContent = message;
+        isValid = false;
+      } else {
+        errorMessageElement.textContent = "";
+      }
     }
 
     for (var id in validationRules) {
@@ -56,7 +61,6 @@
       if (!validationRules[id].test(value)) {
         showError(id, validationRules[id].message);
       } else {
-        // If the field is valid, clear the error message
         showError(id, "");
       }
     }

@@ -8,10 +8,12 @@ import {
   getAllOrchids,
   updateOrchid,
   updateOrchids,
+  createFormOrchid,
 } from "../controllers/orchids";
 
 export default (router: express.Router) => {
   router.get("/orchids", getAllOrchids);
+  router.get("/orchids/create", createFormOrchid);
   router.post("/orchids", addOrchid);
   router.put("/orchids", updateOrchids);
   router.delete("/orchids", deleteOrchids);

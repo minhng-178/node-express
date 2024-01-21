@@ -11,7 +11,7 @@
               <h4 class="section-title">Orchid List</h4>
             </div>
             <div class="text-end mb-3">
-              <a href="/orchidForm" class="btn btn-primary"
+              <a href="/orchids/create" class="btn btn-primary"
                 >Create New Orchid</a
               >
             </div>
@@ -44,7 +44,6 @@
                     <td><%= orchid.original %></td>
                     <td><%= orchid.price %></td>
                     <td><%= orchid.isNatural ? 'Yes' : 'No' %></td>
-
                     <td>
                       <div class="buttons are-small">
                         <a href="/orchids/<%= orchid._id %>"
@@ -83,41 +82,8 @@
       <!-- Toast -->
       <%- include('../partials/toast')-%>
       <!-- Modal -->
+      <%- include('../partials/modal')-%>
     </main>
-    <script>
-      document
-        .querySelector(".btn-danger")
-        .addEventListener("click", function () {
-          const orchidId = this.dataset.id;
-          fetch(`/orchids/${orchidId}?_method=DELETE`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ _id: orchidId }),
-          })
-            .then((response) => {
-              if (response.ok) {
-                var toastEl = document.querySelector("#successToast");
-              } else {
-                var toastEl = document.querySelector("#errorToast");
-              }
-              var toast = new bootstrap.Toast(toastEl);
-              toast.show();
-
-              if (response.ok) {
-                setTimeout(function () {
-                  window.location.href = "/orchids";
-                }, 500);
-              }
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-              var toastEl = document.querySelector("#errorToast");
-              var toast = new bootstrap.Toast(toastEl);
-              toast.show();
-            });
-        });
-    </script>
+    <%- include('../scripts/deleteScript')-%>
   </body>
 </html>
