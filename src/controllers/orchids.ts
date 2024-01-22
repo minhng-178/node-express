@@ -5,6 +5,7 @@ import {
   deleteOldestOrchid,
   deleteOrchidById,
   getOrchidById,
+  getOrchidBySlug,
   getOrchids,
   updateOrchidById,
 } from "../models/orchids";
@@ -48,9 +49,6 @@ export const addOrchid = async (
   next: express.NextFunction
 ) => {
   try {
-    // Use the file URL from the hidden input field
-    req.body.image = req.body.fileURL;
-
     const newOrchid = await createOrchid(req.body);
 
     if (newOrchid) {
@@ -133,11 +131,12 @@ export const updateOrchid = async (
   next: express.NextFunction
 ) => {
   try {
+    console.log("test123");
+
     const updatedOrchid = await updateOrchidById(req.params.orchidId, req.body);
 
     if (updatedOrchid) {
       res.status(200).json(updatedOrchid);
-      // res.redirect(`/orchids/${req.params.orchidId}`);
     } else return res.status(403).end("No request found!");
   } catch (error) {
     console.log(error);

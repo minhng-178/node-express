@@ -34,6 +34,7 @@ export const Orchid = mongoose.model<IOrchid>("Orchid", OrchidSchema);
 export const getOrchids = () => Orchid.find().sort({ createdAt: -1 });
 export const getOrchidByName = (name: string) => Orchid.findOne({ name });
 export const getOrchidById = (id: string) => Orchid.findById(id);
+export const getOrchidBySlug = (slug: string) => Orchid.findOne({ slug: slug });
 export const createOrchid = (values: Record<string, any>) => {
   const slug = slugify(values.name, { lower: true });
   return new Orchid({ ...values, slug })
@@ -42,8 +43,14 @@ export const createOrchid = (values: Record<string, any>) => {
 };
 export const deleteOrchidById = (id: string) =>
   Orchid.findOneAndDelete({ _id: id });
-export const updateOrchidById = (id: string, values: Record<string, any>) =>
-  Orchid.findByIdAndUpdate(id, values);
+export const updateOrchidById = (id: string, values: Record<string, any>) => {
+  if (values.name) {
+    const slug = slugify(values.name, { lower: true });
+    values = { ...values, slug };
+  }
+  return Orchid.findByIdAndUpdate(id, values);
+};
+
 export const deleteOldestOrchid = async () => {
   const oldestOrchid = await Orchid.findOne().sort("createdAt");
   if (!oldestOrchid) {
