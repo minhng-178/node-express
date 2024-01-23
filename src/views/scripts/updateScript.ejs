@@ -20,7 +20,7 @@
     },
     oprice: {
       test: function (value) {
-        return value !== "" && !isNaN(value) && value >= 0;
+        return value !== "" && !isNaN(value) && value >= 0 && value < 1000000;
       },
       message: "Invalid Price",
     },

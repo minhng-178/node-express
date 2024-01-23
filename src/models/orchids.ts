@@ -8,7 +8,7 @@ interface IOrchid extends Document {
   price: number;
   color: string;
   original: string;
-  isNatural: boolean;
+  isNatural?: boolean;
   meta_data?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -19,13 +19,18 @@ const OrchidSchema: Schema = new Schema(
     name: { type: String, required: true, unique: true },
     slug: { type: String, required: true, unique: true },
     image: { type: String, required: true },
-    price: { type: Number, required: false },
+    price: {
+      type: Number,
+      required: true,
+      get: (v: number) => (v / 100).toFixed(2),
+      set: (v: number) => v * 100,
+    },
     color: { type: String, required: true },
     original: { type: String, required: true },
-    isNatural: { type: Boolean, required: false },
+    isNatural: { type: Boolean, default: false, required: false },
     meta_data: { type: String, required: false },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { getters: true } }
 );
 
 export const Orchid = mongoose.model<IOrchid>("Orchid", OrchidSchema);

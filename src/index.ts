@@ -47,6 +47,10 @@ app.get("/", function (req: express.Request, res: express.Response) {
   res.render("pages/home");
 });
 
+app.get("/about", function (req: express.Request, res: express.Response) {
+  res.render("pages/about");
+});
+
 app.get("/login", function (req: express.Request, res: express.Response) {
   res.render("pages/login");
 });
