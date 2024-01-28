@@ -1,36 +1,41 @@
 <script>
   document
     .querySelectorAll("#deleteModal .btn-danger")
-    .addEventListener("click", function () {
-      const orchidId = this.dataset.id;
-      fetch(`/orchids/${orchidId}?_method=DELETE`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ _id: orchidId }),
-      })
-        .then((response) => {
-          var toastEl;
-          if (response.ok) {
-            toastEl = document.querySelector("#successToast");
-          } else {
-            toastEl = document.querySelector("#errorToast");
-          }
-          var toast = new bootstrap.Toast(toastEl);
-          toast.show();
-
-          if (response.ok) {
-            setTimeout(function () {
-              window.location.href = "/orchids";
-            }, 500);
-          }
+    .forEach(function (button) {
+      button.addEventListener("click", function () {
+        const orchidId = this.dataset.id;
+        fetch(`/orchids/${orchidId}?_method=DELETE`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ _id: orchidId }),
         })
-        .catch((error) => {
-          console.error("Error:", error);
-          var toastEl = document.querySelector("#errorToast");
-          var toast = new bootstrap.Toast(toastEl);
-          toast.show();
-        });
+          .then((response) => {
+            var toastEl;
+            if (response.ok) {
+              fetch("/orchids")
+                .then((response) => response.text())
+                .then((html) => {
+                  document.documentElement.innerHTML = html;
+                  var toastEl = document.querySelector("#successToast");
+                  var toast = new bootstrap.Toast(toastEl);
+                  toast.show();
+                  history.pushState({}, "", "/orchids");
+                })
+                .catch((error) => console.error("Error:", error));
+            } else {
+              toastEl = document.querySelector("#errorToast");
+            }
+            var toast = new bootstrap.Toast(toastEl);
+            toast.show();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            var toastEl = document.querySelector("#errorToast");
+            var toast = new bootstrap.Toast(toastEl);
+            toast.show();
+          });
+      });
     });
 </script>

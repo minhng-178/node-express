@@ -13,7 +13,7 @@ import {
 
 export default (router: express.Router) => {
   router.get("/orchids", getAllOrchids);
-  router.get("/orchids/create", createFormOrchid);
+  router.get("/orchids/formCreate", createFormOrchid);
   router.post("/orchids", addOrchid);
   router.put("/orchids", updateOrchids);
   router.delete("/orchids", deleteOrchids);

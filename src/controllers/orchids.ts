@@ -48,9 +48,6 @@ export const addOrchid = async (
   next: express.NextFunction
 ) => {
   try {
-    // Use the file URL from the hidden input field
-    req.body.image = req.body.fileURL;
-
     const newOrchid = await createOrchid(req.body);
 
     if (newOrchid) {
@@ -137,7 +134,6 @@ export const updateOrchid = async (
 
     if (updatedOrchid) {
       res.status(200).json(updatedOrchid);
-      // res.redirect(`/orchids/${req.params.orchidId}`);
     } else return res.status(403).end("No request found!");
   } catch (error) {
     console.log(error);
@@ -152,7 +148,17 @@ export const deleteOrchid = async (
 ) => {
   try {
     await deleteOrchidById(req.params.orchidId);
-    return res.redirect("/Orchids");
+    const orchids = await getOrchids();
+    const orchid = await getOrchidById(req.params.orchidId);
+    if (!orchids) {
+      res.sendStatus(404);
+    }
+
+    return res.render("pages/orchids", {
+      orchids: orchids,
+      orchid: orchid,
+      originalList: originalData,
+    });
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

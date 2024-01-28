@@ -11,7 +11,7 @@
               <h4 class="section-title">Orchid List</h4>
             </div>
             <div class="text-end mb-3">
-              <a href="/orchids/create" class="btn btn-primary"
+              <a href="/orchids/formCreate" class="btn btn-primary"
                 >Create New Orchid</a
               >
             </div>
@@ -45,21 +45,39 @@
                     <td><%= orchid.price %></td>
                     <td><%= orchid.isNatural ? 'Yes' : 'No' %></td>
                     <td>
-                      <div class="buttons are-small">
-                        <a href="/orchids/<%= orchid._id %>"
-                          ><button class="btn btn-warning">
-                            <i class="fa-solid fa-pen-to-square"></i> Edit
-                          </button></a
-                        >
+                      <div class="dropdown">
                         <button
-                          class="btn btn-danger"
-                          data-bs-toggle="modal"
-                          data-bs-target="#deleteModal<%= orchid._id %>"
-                          data-id="<%= orchid._id %>"
+                          class="btn btn-secondary dropdown-toggle"
+                          type="button"
+                          id="dropdownMenuButton"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
                         >
-                          <i class="fa-solid fa-trash"></i>
-                          Delete
+                          <i class="fas fa-ellipsis-v"></i>
                         </button>
+                        <div
+                          class="dropdown-menu"
+                          aria-labelledby="dropdownMenuButton"
+                        >
+                          <a
+                            class="dropdown-item"
+                            href="/orchids/<%= orchid._id %>"
+                          >
+                            <button class="btn btn-warning btn-sm">
+                              <i class="fa-solid fa-pen-to-square"></i> Edit
+                            </button>
+                          </a>
+                          <div class="dropdown-item">
+                            <button
+                              class="btn btn-danger btn-sm"
+                              data-bs-toggle="modal"
+                              data-bs-target="#deleteModal<%= orchid._id %>"
+                              data-id="<%= orchid._id %>"
+                            >
+                              <i class="fa-solid fa-trash"></i> Delete
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </td>
                   </tr>
