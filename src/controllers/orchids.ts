@@ -5,6 +5,7 @@ import {
   deleteOldestOrchid,
   deleteOrchidById,
   getOrchidById,
+  getOrchidBySlug,
   getOrchids,
   updateOrchidById,
 } from "../models/orchids";
@@ -130,6 +131,8 @@ export const updateOrchid = async (
   next: express.NextFunction
 ) => {
   try {
+    console.log("test123");
+
     const updatedOrchid = await updateOrchidById(req.params.orchidId, req.body);
 
     if (updatedOrchid) {

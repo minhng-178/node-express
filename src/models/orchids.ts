@@ -8,7 +8,7 @@ interface IOrchid extends Document {
   price: number;
   color: string;
   original: string;
-  isNatural: boolean;
+  isNatural?: boolean;
   meta_data?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -19,13 +19,18 @@ const OrchidSchema: Schema = new Schema(
     name: { type: String, required: true, unique: true },
     slug: { type: String, required: true, unique: true },
     image: { type: String, required: true },
-    price: { type: Number, required: false },
+    price: {
+      type: Number,
+      required: true,
+      get: (v: number) => (v / 100).toFixed(2),
+      set: (v: number) => v * 100,
+    },
     color: { type: String, required: true },
     original: { type: String, required: true },
-    isNatural: { type: Boolean, required: false },
+    isNatural: { type: Boolean, default: false, required: false },
     meta_data: { type: String, required: false },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { getters: true } }
 );
 
 export const Orchid = mongoose.model<IOrchid>("Orchid", OrchidSchema);
@@ -34,6 +39,7 @@ export const Orchid = mongoose.model<IOrchid>("Orchid", OrchidSchema);
 export const getOrchids = () => Orchid.find().sort({ createdAt: -1 });
 export const getOrchidByName = (name: string) => Orchid.findOne({ name });
 export const getOrchidById = (id: string) => Orchid.findById(id);
+export const getOrchidBySlug = (slug: string) => Orchid.findOne({ slug: slug });
 export const createOrchid = (values: Record<string, any>) => {
   const slug = slugify(values.name, { lower: true });
   return new Orchid({ ...values, slug })
@@ -42,8 +48,14 @@ export const createOrchid = (values: Record<string, any>) => {
 };
 export const deleteOrchidById = (id: string) =>
   Orchid.findOneAndDelete({ _id: id });
-export const updateOrchidById = (id: string, values: Record<string, any>) =>
-  Orchid.findByIdAndUpdate(id, values);
+export const updateOrchidById = (id: string, values: Record<string, any>) => {
+  if (values.name) {
+    const slug = slugify(values.name, { lower: true });
+    values = { ...values, slug };
+  }
+  return Orchid.findByIdAndUpdate(id, values);
+};
+
 export const deleteOldestOrchid = async () => {
   const oldestOrchid = await Orchid.findOne().sort("createdAt");
   if (!oldestOrchid) {

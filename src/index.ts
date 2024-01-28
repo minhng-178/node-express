@@ -47,11 +47,15 @@ app.get("/", function (req: express.Request, res: express.Response) {
   res.render("pages/home");
 });
 
+app.get("/about", function (req: express.Request, res: express.Response) {
+  res.render("pages/about");
+});
+
 app.get("/login", function (req: express.Request, res: express.Response) {
   res.render("pages/login");
 });
 
-app.post("/upload", uploadCloud.single("file"), (req, res) => {
+app.post("/upload", uploadCloud.single("image"), (req, res) => {
   if (!req.file) {
     return res.status(400).send("No file uploaded.");
   }
