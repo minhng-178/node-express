@@ -91,4 +91,26 @@
       border-radius: 5%;
     }
   </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", (event) => {
+      const navLinks = document.querySelectorAll(".nav-link");
+
+      navLinks.forEach((link) => {
+        link.addEventListener("click", (event) => {
+          event.preventDefault();
+          const href = link.getAttribute("href");
+          window.location.href = href;
+
+          if (link.classList.contains("link-secondary")) {
+            link.classList.remove("link-secondary");
+            link.classList.add("link-dark");
+          } else if (link.classList.contains("link-dark")) {
+            link.classList.remove("link-dark");
+            link.classList.add("link-secondary");
+          }
+        });
+      });
+    });
+  </script>
 </head>

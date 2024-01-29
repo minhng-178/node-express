@@ -131,12 +131,15 @@ export const updateOrchid = async (
   next: express.NextFunction
 ) => {
   try {
-    console.log("test123");
-
     const updatedOrchid = await updateOrchidById(req.params.orchidId, req.body);
+    const orchids = await getOrchids();
 
     if (updatedOrchid) {
-      res.status(200).json(updatedOrchid);
+      res.render("pages/orchid", {
+        orchid: updatedOrchid,
+        orchids: orchids,
+        originalList: originalData,
+      });
     } else return res.status(403).end("No request found!");
   } catch (error) {
     console.log(error);

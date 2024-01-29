@@ -66,25 +66,26 @@
     }
 
     if (isValid) {
-      uploadFile(event.target);
+      submitForm(event.target);
     }
   });
 
-  function uploadFile(form) {
-    var formData = new FormData(form);
-    fetch("/upload", { method: "POST", body: formData })
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.fileURL) {
-          document.querySelector("#hiddenFileURL").value = result.fileURL;
-          formData.set("image", result.fileURL);
-          submitForm(form, formData);
-        }
-      })
-      .catch((error) => console.error("Error:", error));
-  }
+  // function uploadFile(form) {
+  //   var formData = new FormData(form);
+  //   fetch("/upload", { method: "POST", body: formData })
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       if (result.fileURL) {
+  //         document.querySelector("#hiddenFileURL").value = result.fileURL;
+  //         formData.set("image", result.fileURL);
+  //         submitForm(form, formData);
+  //       }
+  //     })
+  //     .catch((error) => console.error("Error:", error));
+  // }
 
-  function submitForm(form, formData) {
+  function submitForm(form) {
+    var formData = new FormData(form);
     var data = Object.fromEntries(formData);
     fetch("/orchids", {
       method: "POST",
@@ -109,8 +110,6 @@
         } else {
           toastEl = document.querySelector("#errorToast");
         }
-        var toast = new bootstrap.Toast(toastEl);
-        toast.show();
       })
       .catch((error) => {
         console.error("Error:", error);
