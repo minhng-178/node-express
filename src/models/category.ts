@@ -31,3 +31,10 @@ export const deleteCategoryById = (id: string) =>
   Category.findOneAndDelete({ _id: id });
 export const updateCategoryById = (id: string, values: Record<string, any>) =>
   Category.findByIdAndUpdate(id, values);
+export const deleteOldestCategory = async () => {
+  const oldestCategory = await Category.findOne().sort("createdAt");
+  if (!oldestCategory) {
+    return null;
+  }
+  return Category.findOneAndDelete(oldestCategory._id);
+};

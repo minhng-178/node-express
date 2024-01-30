@@ -2,8 +2,10 @@ import express from "express";
 import {
   createCategory,
   deleteCategoryById,
+  deleteOldestCategory,
   getCategories,
   getCategoryById,
+  getCategoryByName,
   updateCategoryById,
 } from "../models/category";
 
@@ -27,10 +29,19 @@ export const addCategory = async (
   next: express.NextFunction
 ) => {
   try {
+    const existingCategory = await getCategoryByName(req.body.name);
+
+    if (existingCategory) {
+      return res.status(400).json({ message: "Category name must be unique" });
+    }
+
     const newCategory = await createCategory(req.body);
+
     if (newCategory) {
       return res.status(200).json(newCategory);
-    } else return res.sendStatus(403).end("No request found!");
+    } else {
+      return res.status(403).end("No request found!");
+    }
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -56,7 +67,9 @@ export const deleteCategories = async (
   next: express.NextFunction
 ) => {
   try {
-    return res.status(403).end("Deleting all Category");
+    const deletedOldestCategory = await deleteOldestCategory();
+    if (!deletedOldestCategory) return res.status(404).end("No orchids found!");
+    return res.status(403).end("Deleting the oldest Category");
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -122,10 +135,10 @@ export const deleteCategory = async (
   next: express.NextFunction
 ) => {
   try {
-    await deleteCategoryById(req.params.CategoryId);
+    await deleteCategoryById(req.params.categoryId);
     return res
-      .sendStatus(200)
-      .end(`Delete category with ID: ${req.params.CategoryId}`);
+      .status(200)
+      .end(`Delete category with ID: ${req.params.categoryId}`);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

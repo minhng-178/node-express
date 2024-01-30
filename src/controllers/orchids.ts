@@ -5,8 +5,10 @@ import {
   deleteOldestOrchid,
   deleteOrchidById,
   getOrchidById,
+  getOrchidByName,
   getOrchidBySlug,
   getOrchids,
+  getTotalPages,
   updateOrchidById,
 } from "../models/orchids";
 
@@ -19,6 +21,16 @@ export const originalData = [
   { id: "6", name: "UAE" },
   { id: "7", name: "Korea" },
   { id: "8", name: "HongKong" },
+  { id: "9", name: "Indonesia" },
+  { id: "10", name: "Colombia" },
+  { id: "11", name: "Ecuador" },
+  { id: "12", name: "New Guinea" },
+  { id: "13", name: "Brazil" },
+  { id: "14", name: "Peru" },
+  { id: "15", name: "Borneo" },
+  { id: "16", name: "India" },
+  { id: "17", name: "Singapore" },
+  { id: "18", name: "Costa Rica" },
 ];
 
 export const getAllOrchids = async (
@@ -27,7 +39,17 @@ export const getAllOrchids = async (
   next: express.NextFunction
 ) => {
   try {
-    const orchids = await getOrchids();
+    const existingOrchid = await getOrchidByName(req.body.name);
+
+    if (existingOrchid) {
+      return res.status(400).json({ message: "Orchid name must be unique" });
+    }
+
+    const page = parseInt(req.query.page as string) || 1;
+
+    const orchids = await getOrchids(page);
+    const totalPages = await getTotalPages();
+
     const orchid = await getOrchidById(req.params.orchidId);
     if (!orchids) {
       res.sendStatus(404);
@@ -37,12 +59,15 @@ export const getAllOrchids = async (
       orchids: orchids,
       orchid: orchid,
       originalList: originalData,
+      page: page,
+      totalPages: totalPages,
     });
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
   }
 };
+
 export const addOrchid = async (
   req: express.Request,
   res: express.Response,
@@ -154,7 +179,12 @@ export const deleteOrchid = async (
 ) => {
   try {
     await deleteOrchidById(req.params.orchidId);
-    const orchids = await getOrchids();
+
+    const page = parseInt(req.query.page as string) || 1;
+
+    const orchids = await getOrchids(page);
+    const totalPages = await getTotalPages();
+
     const orchid = await getOrchidById(req.params.orchidId);
     if (!orchids) {
       res.sendStatus(404);
@@ -164,6 +194,8 @@ export const deleteOrchid = async (
       orchids: orchids,
       orchid: orchid,
       originalList: originalData,
+      page: page,
+      totalPages: totalPages,
     });
   } catch (error) {
     console.log(error);

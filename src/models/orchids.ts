@@ -36,7 +36,21 @@ const OrchidSchema: Schema = new Schema(
 export const Orchid = mongoose.model<IOrchid>("Orchid", OrchidSchema);
 
 //Orchids action
-export const getOrchids = () => Orchid.find().sort({ createdAt: -1 });
+const RESULTS_PER_PAGE = 5;
+
+export const getOrchids = (page = 1, name = "") => {
+  const skip = (page - 1) * RESULTS_PER_PAGE;
+  return Orchid.find({ name: new RegExp(name, "i") })
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(RESULTS_PER_PAGE);
+};
+
+export const getTotalPages = async () => {
+  const totalOrchids = await Orchid.countDocuments();
+  return Math.ceil(totalOrchids / RESULTS_PER_PAGE);
+};
+
 export const getOrchidByName = (name: string) => Orchid.findOne({ name });
 export const getOrchidById = (id: string) => Orchid.findById(id);
 export const getOrchidBySlug = (slug: string) => Orchid.findOne({ slug: slug });

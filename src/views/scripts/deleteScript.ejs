@@ -1,5 +1,11 @@
 <script>
   document
+    .getElementById("searchButton")
+    .addEventListener("click", function () {
+      const searchTerm = document.getElementById("searchOrchid").value;
+    });
+
+  document
     .querySelectorAll("#deleteModal .btn-danger")
     .forEach(function (button) {
       button.addEventListener("click", function () {
@@ -17,11 +23,11 @@
               fetch("/orchids")
                 .then((response) => response.text())
                 .then((html) => {
+                  history.pushState({}, "", "/orchids");
                   document.documentElement.innerHTML = html;
                   var toastEl = document.querySelector("#successToast");
                   var toast = new bootstrap.Toast(toastEl);
                   toast.show();
-                  history.pushState({}, "", "/orchids");
                 })
                 .catch((error) => console.error("Error:", error));
             } else {
