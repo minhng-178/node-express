@@ -10,15 +10,16 @@ import {
   updateOrchids,
   createFormOrchid,
 } from "../controllers/orchids";
+import { isAdmin, isAuthenticated } from "../middlewares";
 
 export default (router: express.Router) => {
-  router.get("/orchids", getAllOrchids);
-  router.get("/orchids/formCreate", createFormOrchid);
-  router.post("/orchids", addOrchid);
-  router.put("/orchids", updateOrchids);
-  router.delete("/orchids", deleteOrchids);
-  router.get("/orchids/:orchidId", getOrchid);
-  router.post("/orchids/:orchidId", addOrchidWithId);
-  router.put("/orchids/:orchidId", updateOrchid);
-  router.delete("/orchids/:orchidId", deleteOrchid);
+  router.get("/orchids", isAuthenticated, getAllOrchids);
+  router.get("/orchids/formCreate", isAuthenticated, isAdmin, createFormOrchid);
+  router.post("/orchids", isAuthenticated, isAdmin, addOrchid);
+  router.put("/orchids", isAuthenticated, isAdmin, updateOrchids);
+  router.delete("/orchids", isAuthenticated, isAdmin, deleteOrchids);
+  router.get("/orchids/:orchidId", isAuthenticated, isAdmin, getOrchid);
+  router.post("/orchids/:orchidId", isAuthenticated, isAdmin, addOrchidWithId);
+  router.put("/orchids/:orchidId", isAuthenticated, isAdmin, updateOrchid);
+  router.delete("/orchids/:orchidId", isAuthenticated, isAdmin, deleteOrchid);
 };

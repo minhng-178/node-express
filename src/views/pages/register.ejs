@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Login Page</title>
+    <title>Register Page</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -120,8 +120,8 @@
         </svg>
         <span> Orchids </span>
       </a>
-      <form method="post" class="mt-5">
-        <h1 class="h3 mb-3 text-center fw-normal">Please sign in</h1>
+      <form method="get" class="mt-5">
+        <h1 class="h3 mb-3 text-center fw-normal">Please sign up</h1>
 
         <div class="form-floating">
           <input
@@ -134,6 +134,19 @@
           />
           <label for="floatingInput">Email</label>
         </div>
+
+        <div class="form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            placeholder="name"
+            required
+            onblur="validateName()"
+          />
+          <label for="floatingInput">Name</label>
+        </div>
+
         <div class="form-floating">
           <input
             type="password"
@@ -146,16 +159,16 @@
           <label for="floatingPassword">Password</label>
         </div>
 
-        <div class="form-check text-start my-3">
+        <div class="form-floating">
           <input
-            class="form-check-input"
-            type="checkbox"
-            value="remember-me"
-            id="flexCheckDefault"
+            type="password"
+            class="form-control"
+            id="confirmPsw"
+            placeholder="Confirm Password"
+            required
+            onblur="validateConfirmPassword()"
           />
-          <label class="form-check-label" for="flexCheckDefault">
-            Remember me
-          </label>
+          <label for="floatingPassword">Confirm Password</label>
         </div>
 
         <div class="text-center w-full my-3">
@@ -170,13 +183,25 @@
         </div>
 
         <p class="mt-3 text-center">
-          Don't have an account yet?
-          <a class="text-decoration-none" href="/register">Please sign up</a>
+          Already have an account?
+          <a class="text-decoration-none" href="/login">Please sign in</a>
         </p>
       </form>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+      function validateName() {
+        const name = document.getElementById("name").value;
+
+        if (!name) {
+          Swal.fire({
+            icon: "error",
+            title: "Submission failed",
+            text: "Please fill in the name field",
+          });
+        }
+      }
+
       function validateEmail() {
         const email = document.getElementById("email").value;
         const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
@@ -211,34 +236,59 @@
         }
       }
 
+      function validateConfirmPassword() {
+        const password = document.getElementById("psw").value;
+        const confirmPassword = document.getElementById("confirmPsw").value;
+
+        if (password !== confirmPassword) {
+          Swal.fire({
+            icon: "error",
+            title: "Passwords do not match",
+            text: "Please make sure your passwords match",
+          });
+        }
+      }
+
       async function checkLogin() {
         event.preventDefault();
 
+        const name = document.getElementById("name").value;
         const email = document.getElementById("email").value;
         const password = document.getElementById("psw").value;
+        const confirmPassword = document.getElementById("confirmPsw").value;
 
-        const response = await fetch("/auth/login", {
+        if (password !== confirmPassword) {
+          Swal.fire({
+            icon: "error",
+            title: "Passwords do not match",
+            text: "Please make sure your passwords match",
+          });
+          return;
+        }
+
+        const response = await fetch("/auth/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ name, email, password }),
         });
 
         if (response.ok) {
           const data = await response.json();
+
           Swal.fire({
             icon: "success",
-            title: "Logged in successfully",
-            text: `Welcome back!`,
+            title: "Registered successfully",
+            text: `Welcome, ${data.name}!`,
           }).then(() => {
-            window.location.href = "/";
+            window.location.href = "/login";
           });
         } else {
           Swal.fire({
             icon: "error",
-            title: "Failed to log in",
-            text: "Please check your email and password",
+            title: "Failed to register",
+            text: "Please check your information",
             footer: '<a href="#">Why do I have this issue?</a>',
           });
         }

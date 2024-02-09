@@ -49,8 +49,8 @@ export const getAllOrchids = async (
 
     const orchids = await getOrchids(page);
     const totalPages = await getTotalPages();
-
     const orchid = await getOrchidById(req.params.orchidId);
+
     if (!orchids) {
       res.sendStatus(404);
     }
@@ -74,11 +74,19 @@ export const addOrchid = async (
   next: express.NextFunction
 ) => {
   try {
+    const existingOrchid = await getOrchidByName(req.body.name);
+
+    if (existingOrchid) {
+      return res.sendStatus(400);
+    }
+
     const newOrchid = await createOrchid(req.body);
 
     if (newOrchid) {
       res.status(201).json(newOrchid);
-    } else return res.status(403).end("No request found!");
+    } else {
+      return res.status(403).end("No request found!");
+    }
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -120,12 +128,10 @@ export const getOrchid = async (
 ) => {
   try {
     const orchid = await getOrchidById(req.params.orchidId);
-    const orchids = await getOrchids();
 
     if (orchid) {
       res.render("pages/orchid", {
         orchid: orchid,
-        orchids: orchids,
         originalList: originalData,
       });
     } else return res.status(403).end("No request found!");
@@ -157,14 +163,9 @@ export const updateOrchid = async (
 ) => {
   try {
     const updatedOrchid = await updateOrchidById(req.params.orchidId, req.body);
-    const orchids = await getOrchids();
 
     if (updatedOrchid) {
-      res.render("pages/orchid", {
-        orchid: updatedOrchid,
-        orchids: orchids,
-        originalList: originalData,
-      });
+      return res.status(200).json(updatedOrchid);
     } else return res.status(403).end("No request found!");
   } catch (error) {
     console.log(error);
@@ -189,7 +190,6 @@ export const deleteOrchid = async (
     if (!orchids) {
       res.sendStatus(404);
     }
-
     return res.render("pages/orchids", {
       orchids: orchids,
       orchid: orchid,

@@ -1,0 +1,28 @@
+<div class="dropdown">
+  <button
+    class="btn btn-light dropdown-toggle"
+    type="button"
+    id="dropdownMenuButton1"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    <img
+      src="<%= locals.user.avatar || 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-479x512-n8sg74wg.png' %>"
+      class="rounded-circle"
+      width="30"
+      height="30"
+    />
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li>
+      <span class="dropdown-item-text"><%= locals.user.email %></span>
+    </li>
+    <li><a class="dropdown-item" href="/user">Profile</a></li>
+    <li><hr class="dropdown-divider" /></li>
+    <li>
+      <form action="/auth/logout" method="get">
+        <button type="submit" class="dropdown-item">Logout</button>
+      </form>
+    </li>
+  </ul>
+</div>

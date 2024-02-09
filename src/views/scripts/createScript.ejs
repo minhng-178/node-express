@@ -1,121 +1,132 @@
 <script>
-  document.querySelector("form").addEventListener("submit", function (event) {
-    event.preventDefault();
+  // Add this function to your script
+  function validateForm() {
+    let isValid = true;
 
-    var validationRules = {
-      oname: {
-        test: function (value) {
-          return value !== "";
-        },
-        message: "Orchid Name is required",
-      },
-      oimage: {
-        test: function (value) {
-          return value !== "";
-        },
-        message: "Image File is required",
-      },
-      ocolor: {
-        test: function (value) {
-          return value !== "";
-        },
-        message: "Color is required",
-      },
-      oprice: {
-        test: function (value) {
-          return value !== "" && !isNaN(value) && value >= 0 && value < 1000000;
-        },
-        message: "Invalid Price",
-      },
-      isNatural: {
-        test: function () {
-          return (
-            document.getElementById("isNaturalYes").checked ||
-            document.getElementById("isNaturalNo").checked
-          );
-        },
-        message: "Please select whether the orchid is natural or not",
-      },
-      ooriginal: {
-        test: function (value) {
-          return value !== "Open this select menu";
-        },
-        message: "Please select an Original name",
-      },
-    };
-
-    var isValid = true;
-
-    function showError(id, message) {
-      var errorMessageElement = document.getElementById(id + "Error");
-      if (message) {
-        errorMessageElement.textContent = message;
-        isValid = false;
-      } else {
-        errorMessageElement.textContent = "";
-      }
+    // Orchid Name validation
+    const oname = document.getElementById("oname");
+    if (oname.value.trim() === "") {
+      document.getElementById("onameError").textContent =
+        "Orchid Name is required";
+      isValid = false;
+    } else {
+      document.getElementById("onameError").textContent = "";
     }
 
-    for (var id in validationRules) {
-      var value = id === "isNatural" ? null : document.getElementById(id).value;
-      if (!validationRules[id].test(value)) {
-        showError(id, validationRules[id].message);
-      } else {
-        showError(id, "");
-      }
+    // Image URL validation
+    const oimage = document.getElementById("oimage");
+    if (oimage.value.trim() === "") {
+      document.getElementById("oimageError").textContent =
+        "Image URL is required";
+      isValid = false;
+    } else {
+      document.getElementById("oimageError").textContent = "";
     }
 
-    if (isValid) {
-      submitForm(event.target);
+    // Color validation
+    const ocolor = document.getElementById("ocolor");
+    if (ocolor.value.trim() === "") {
+      document.getElementById("ocolorError").textContent = "Color is required";
+      isValid = false;
+    } else {
+      document.getElementById("ocolorError").textContent = "";
     }
-  });
 
-  // function uploadFile(form) {
-  //   var formData = new FormData(form);
-  //   fetch("/upload", { method: "POST", body: formData })
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       if (result.fileURL) {
-  //         document.querySelector("#hiddenFileURL").value = result.fileURL;
-  //         formData.set("image", result.fileURL);
-  //         submitForm(form, formData);
-  //       }
-  //     })
-  //     .catch((error) => console.error("Error:", error));
-  // }
+    // Price validation
+    const oprice = document.getElementById("oprice");
+    if (oprice.value.trim() === "") {
+      document.getElementById("opriceError").textContent = "Price is required";
+      isValid = false;
+    } else if (isNaN(oprice.value)) {
+      document.getElementById("opriceError").textContent =
+        "Price must be a number";
+      isValid = false;
+    } else {
+      document.getElementById("opriceError").textContent = "";
+    }
 
-  function submitForm(form) {
-    var formData = new FormData(form);
-    var data = Object.fromEntries(formData);
-    fetch("/orchids", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        var toastEl;
-        if (response.ok) {
-          fetch("/orchids")
-            .then((response) => response.text())
-            .then((html) => {
-              document.documentElement.innerHTML = html;
-              var toastEl = document.querySelector("#successToast");
-              var toast = new bootstrap.Toast(toastEl);
-              toast.show();
-              history.pushState({}, "", "/orchids");
-            })
-            .catch((error) => console.error("Error:", error));
-        } else {
-          toastEl = document.querySelector("#errorToast");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        var toastEl = document.querySelector("#errorToast");
-        var toast = new bootstrap.Toast(toastEl);
-        toast.show();
+    // Is Natural validation
+    const isNaturalYes = document.getElementById("isNaturalYes");
+    const isNaturalNo = document.getElementById("isNaturalNo");
+    if (!isNaturalYes.checked && !isNaturalNo.checked) {
+      document.getElementById("isNaturalError").textContent =
+        "Please select Yes or No for Is Natural";
+      isValid = false;
+    } else {
+      document.getElementById("isNaturalError").textContent = "";
+    }
+
+    // Original name validation
+    const ooriginal = document.getElementById("ooriginal");
+    if (ooriginal.selectedIndex === 0) {
+      document.getElementById("ooriginalError").textContent =
+        "Original name is required";
+      isValid = false;
+    } else {
+      document.getElementById("ooriginalError").textContent = "";
+    }
+
+    return isValid;
+  }
+
+  const form = document.querySelector(".form-bordered");
+  form.addEventListener("submit", submitForm);
+
+  async function submitForm(e) {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "An error occurred!",
       });
+    }
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+
+    try {
+      const response = await fetch("/orchids", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Added successfully!",
+        }).then(() => {
+          window.location.href = "/orchids";
+        });
+      } else {
+        // Check the status code of the response
+        if (response.status === 400) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "An orchid with this name already exists!",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "An error occurred!",
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "An error occurred!",
+      });
+    }
   }
 </script>

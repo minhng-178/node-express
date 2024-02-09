@@ -12,9 +12,11 @@
             </div>
             <div class="row g-5 mb-3">
               <div class="col-md-6">
+                <% if (locals.user.isAdmin === true) { %>
                 <a href="/orchids/formCreate" class="btn btn-primary">
                   Create New Orchid
                 </a>
+                <% } %>
               </div>
 
               <!-- <div class="col-md-6">
@@ -79,6 +81,8 @@
                           class="dropdown-menu"
                           aria-labelledby="dropdownMenuButton"
                         >
+                          <% if (locals.user.isAdmin === true) { %>
+
                           <a
                             class="dropdown-item"
                             href="/orchids/<%= orchid._id %>"
@@ -90,13 +94,13 @@
                           <div class="dropdown-item">
                             <button
                               class="btn btn-danger btn-sm"
-                              data-bs-toggle="modal"
-                              data-bs-target="#deleteModal<%= orchid._id %>"
+                              data-name="<%= orchid.name %>"
                               data-id="<%= orchid._id %>"
                             >
                               <i class="fa-solid fa-trash"></i> Delete
                             </button>
                           </div>
+                          <% } %>
                         </div>
                       </div>
                     </td>
@@ -145,10 +149,6 @@
         </div>
       </div>
       <%- include('../partials/footer')-%>
-      <!-- Toast -->
-      <%- include('../partials/toast')-%>
-      <!-- Modal -->
-      <%- include('../partials/modal')-%>
     </main>
     <%- include('../scripts/deleteScript')-%>
   </body>

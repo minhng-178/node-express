@@ -1,45 +1,57 @@
 <script>
-  document
-    .getElementById("searchButton")
-    .addEventListener("click", function () {
-      const searchTerm = document.getElementById("searchOrchid").value;
-    });
+  document.querySelectorAll(".btn-danger").forEach((button) => {
+    button.addEventListener("click", function (event) {
+      event.preventDefault();
 
-  document
-    .querySelectorAll("#deleteModal .btn-danger")
-    .forEach(function (button) {
-      button.addEventListener("click", function () {
-        const orchidId = this.dataset.id;
-        fetch(`/orchids/${orchidId}?_method=DELETE`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ _id: orchidId }),
-        })
-          .then((response) => {
-            var toastEl;
+      const orchidId = this.getAttribute("data-id");
+      const orchidName = this.getAttribute("data-name"); // Get the name of the orchid
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: `You are about to delete ${orchidName}. You won't be able to revert this!`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const formData = new FormData(
+            document.getElementById(`deleteForm${orchidId}`)
+          );
+          const data = Object.fromEntries(formData);
+
+          fetch(`/orchids/${orchidId}?_method=DELETE`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }).then((response) => {
             if (response.ok) {
-              fetch("/orchids")
-                .then((response) => response.text())
-                .then((html) => {
-                  history.pushState({}, "", "/orchids");
-                  document.documentElement.innerHTML = html;
-                  var toastEl = document.querySelector("#successToast");
-                  var toast = new bootstrap.Toast(toastEl);
-                  toast.show();
-                })
-                .catch((error) => console.error("Error:", error));
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+              }).then(() => {
+                window.location.href = "/orchids";
+              });
             } else {
-              toastEl = document.querySelector("#errorToast");
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "An error occurred!",
+              });
             }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            var toastEl = document.querySelector("#errorToast");
-            var toast = new bootstrap.Toast(toastEl);
-            toast.show();
           });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire({
+            title: "Cancelled",
+            text: "Your orchid is safe :)",
+            icon: "error",
+          });
+        }
       });
     });
+  });
 </script>

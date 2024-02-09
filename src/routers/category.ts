@@ -9,14 +9,30 @@ import {
   updateCategories,
   updateCategory,
 } from "../controllers/category";
+import { isAdmin, isAuthenticated } from "../middlewares";
 
 export default (router: express.Router) => {
-  router.get("/categories", getAllCategories);
-  router.post("/categories", addCategory);
-  router.put("/categories", updateCategories);
-  router.delete("/categories", deleteCategories);
-  router.get("/categories/:categoryId", getCategory);
-  router.post("/categories/:categoryId", addCategoryWithId);
-  router.put("/categories/:categoryId", updateCategory);
-  router.delete("/categories/:categoryId", deleteCategory);
+  router.get("/categories", isAuthenticated, getAllCategories);
+  router.post("/categories", isAuthenticated, isAdmin, addCategory);
+  router.put("/categories", isAuthenticated, isAdmin, updateCategories);
+  router.delete("/categories", isAuthenticated, isAdmin, deleteCategories);
+  router.get("/categories/:categoryId", isAuthenticated, isAdmin, getCategory);
+  router.post(
+    "/categories/:categoryId",
+    isAuthenticated,
+    isAdmin,
+    addCategoryWithId
+  );
+  router.put(
+    "/categories/:categoryId",
+    isAuthenticated,
+    isAdmin,
+    updateCategory
+  );
+  router.delete(
+    "/categories/:categoryId",
+    isAuthenticated,
+    isAdmin,
+    deleteCategory
+  );
 };

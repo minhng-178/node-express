@@ -6,11 +6,13 @@ import dotenv from "dotenv";
 import express from "express";
 import bodyParser from "body-parser";
 import compression from "compression";
+import cookieParser from "cookie-parser";
 import methodOverride from "method-override";
 
 import router from "./routers";
 import { connectDB } from "./configs/db";
 import { uploadCloud } from "./configs/cloudinary";
+import { User } from "./models/users";
 
 dotenv.config();
 
@@ -34,11 +36,35 @@ connectDB();
 
 app.use(morgan("dev"));
 app.use(compression());
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: true }));
-
 app.use(express.static("public"));
+
+app.use(async (req, res, next) => {
+  const refreshToken = req.cookies.jwt;
+  if (refreshToken) {
+    try {
+      const user = await User.findOne({
+        "authentication.refreshToken": refreshToken,
+      }).select("+authentication.refreshToken");
+
+      if (user) {
+        res.locals.user = user;
+        res.locals.isLoggedIn = true;
+      } else {
+        res.locals.isLoggedIn = false;
+      }
+    } catch (error) {
+      console.error(error);
+      res.locals.isLoggedIn = false;
+    }
+  } else {
+    res.locals.isLoggedIn = false;
+  }
+  next();
+});
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -53,6 +79,10 @@ app.get("/about", function (req: express.Request, res: express.Response) {
 
 app.get("/login", function (req: express.Request, res: express.Response) {
   res.render("pages/login");
+});
+
+app.get("/register", function (req: express.Request, res: express.Response) {
+  res.render("pages/register");
 });
 
 app.post("/upload", uploadCloud.single("image"), (req, res) => {

@@ -1,16 +1,17 @@
 import express from "express";
 
-import nations from "./nations";
-import players from "./players";
 import category from "./category";
 import orchids from "./orchids";
+import authentication from "./authentication";
+import users from "./users";
 
 const router = express.Router();
 
 export default (): express.Router => {
-  nations(router);
-  players(router);
   category(router);
   orchids(router);
+  users(router);
+  authentication(router);
+
   return router;
 };
