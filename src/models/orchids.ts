@@ -1,5 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 import slugify from "slugify";
+import { IComment } from "./comments";
+import { ICategory } from "./category";
 
 interface IOrchid extends Document {
   name: string;
@@ -8,7 +10,9 @@ interface IOrchid extends Document {
   price: number;
   color: string;
   original: string;
+  category: ICategory["_id"];
   isNatural?: boolean;
+  comments: IComment[];
   meta_data?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -27,6 +31,8 @@ const OrchidSchema: Schema = new Schema(
     },
     color: { type: String, required: true },
     original: { type: String, required: true },
+    category: { type: Schema.Types.ObjectId, ref: "Category" },
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
     isNatural: { type: Boolean, default: false, required: false },
     meta_data: { type: String, required: false },
   },
@@ -41,6 +47,7 @@ const RESULTS_PER_PAGE = 5;
 export const getOrchids = (page = 1, name = "") => {
   const skip = (page - 1) * RESULTS_PER_PAGE;
   return Orchid.find({ name: new RegExp(name, "i") })
+    .populate("category", "name")
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(RESULTS_PER_PAGE);
@@ -53,7 +60,8 @@ export const getTotalPages = async () => {
 
 export const getOrchidByName = (name: string) => Orchid.findOne({ name });
 export const getOrchidById = (id: string) => Orchid.findById(id);
-export const getOrchidBySlug = (slug: string) => Orchid.findOne({ slug: slug });
+export const getOrchidBySlug = (slug: string) =>
+  Orchid.findOne({ slug: slug }).populate("category", "name");
 export const createOrchid = (values: Record<string, any>) => {
   const slug = slugify(values.name, { lower: true });
   return new Orchid({ ...values, slug })

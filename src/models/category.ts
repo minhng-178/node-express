@@ -1,6 +1,6 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose from "mongoose";
 
-interface ICategory extends Document {
+export interface ICategory extends mongoose.Document {
   name: string;
   description: string;
   meta_data?: string;
@@ -8,7 +8,7 @@ interface ICategory extends Document {
   updatedAt: Date;
 }
 
-const CategorySchema: Schema = new Schema(
+const CategorySchema: mongoose.Schema = new mongoose.Schema(
   {
     name: { type: String, required: true, unique: true },
     description: { type: String, required: true },

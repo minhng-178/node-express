@@ -66,6 +66,16 @@
       document.getElementById("ooriginalError").textContent = "";
     }
 
+    // Category name validation
+    const ocategory = document.getElementById("ocategory");
+    if (ocategory.selectedIndex === 0) {
+      document.getElementById("ocategoryError").textContent =
+        "Category name is required";
+      isValid = false;
+    } else {
+      document.getElementById("ocategoryError").textContent = "";
+    }
+
     return isValid;
   }
 

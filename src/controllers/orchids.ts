@@ -6,11 +6,11 @@ import {
   deleteOrchidById,
   getOrchidById,
   getOrchidByName,
-  getOrchidBySlug,
   getOrchids,
   getTotalPages,
   updateOrchidById,
 } from "../models/orchids";
+import { getCategories } from "../models/category";
 
 export const originalData = [
   { id: "1", name: "Viet Nam" },
@@ -39,16 +39,10 @@ export const getAllOrchids = async (
   next: express.NextFunction
 ) => {
   try {
-    const existingOrchid = await getOrchidByName(req.body.name);
-
-    if (existingOrchid) {
-      return res.status(400).json({ message: "Orchid name must be unique" });
-    }
-
     const page = parseInt(req.query.page as string) || 1;
 
-    const orchids = await getOrchids(page);
     const totalPages = await getTotalPages();
+    const orchids = await getOrchids(page);
     const orchid = await getOrchidById(req.params.orchidId);
 
     if (!orchids) {
@@ -128,10 +122,11 @@ export const getOrchid = async (
 ) => {
   try {
     const orchid = await getOrchidById(req.params.orchidId);
-
+    const categories = await getCategories();
     if (orchid) {
       res.render("pages/orchid", {
         orchid: orchid,
+        categoriesList: categories,
         originalList: originalData,
       });
     } else return res.status(403).end("No request found!");
@@ -208,8 +203,12 @@ export const createFormOrchid = async (
   res: express.Response,
   next: express.NextFunction
 ) => {
+  const categories = await getCategories();
   try {
-    res.render("pages/orchidForm", { originalList: originalData });
+    res.render("pages/orchidForm", {
+      originalList: originalData,
+      categoriesList: categories,
+    });
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

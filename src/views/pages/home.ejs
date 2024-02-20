@@ -33,15 +33,67 @@
             </div>
           </div>
         </div>
+        <div class="album py-5 bg-body-tertiary">
+          <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+              <% orchids.forEach(function(orchid) { %>
+              <div class="col">
+                <div class="card shadow-sm position-relative">
+                  <small class="position-absolute top-0 end-0 m-2">
+                    <i class="fa-solid fa-heart"></i>
+                  </small>
+                  <img
+                    class="object-fit-cover border rounded"
+                    width="100%"
+                    height="225"
+                    src="<%= orchid.image %>"
+                    alt="<%= orchid.name %>"
+                  />
 
-        <!-- <h1>Upload Image</h1>
-        <form action="/upload" method="post" enctype="multipart/form-data">
-          <input type="file" name="file" accept="image/png, image/jpeg" />
-          <button type="submit">Upload</button>
-        </form> -->
+                  <div class="card-body">
+                    <div
+                      class="d-flex justify-content-between align-items-center mb-2"
+                    >
+                      <p class="card-text m-0">
+                        <%= orchid.name %> - <%= orchid.color %>
+                      </p>
+                      <small>
+                        <p class="card-text m-0 text-body-secondary">
+                          <%= orchid.price %> USD
+                        </p>
+                      </small>
+                    </div>
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <div class="btn-group">
+                        <a
+                          type="button"
+                          class="btn btn-sm btn-outline-primary"
+                          href="/orchidDetail/<%= orchid.slug %>"
+                        >
+                          <i class="fa-solid fa-eye"></i> View
+                        </a>
+                      </div>
+                      <small class="text-body-secondary">
+                        <% for(let i = 0; i < 5; i++) { %>
+                        <i
+                          class="fa-solid fa-star star-<%= orchid._id %>"
+                          onclick="rateOrchid('<%= i+1 %>', '<%= orchid._id %>')"
+                        ></i>
+                        <% } %>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <% }); %>
+            </div>
+          </div>
+        </div>
       </div>
-      <%-include('../scripts/globalScript')-%> <%-
-      include('../partials/footer')-%>
+      <%-include('../scripts/globalScript')-%>
+      <%-include('../partials/footer')-%>
     </main>
   </body>
 </html>

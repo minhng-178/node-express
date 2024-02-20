@@ -162,7 +162,7 @@ export const logout = async (req: express.Request, res: express.Response) => {
       secure: true,
     });
 
-    return res.status(200).render("pages/home");
+    return res.status(200).render("pages/login");
   } catch (error) {
     console.log(error);
     return res

@@ -84,6 +84,20 @@
                 </select>
                 <span id="ooriginalError" class="text-danger"></span>
               </div>
+
+              <div class="mb-3">
+                <label for="category" class="form-label">Category name</label>
+                <select class="form-select" name="category" id="ocategory">
+                  <option selected>Open this select menu</option>
+                  <%for (let category of categoriesList ){ %>
+                  <option value="<%= category._id %>">
+                    <%= category.name %>
+                  </option>
+                  <% } %>
+                </select>
+                <span id="ocategoryError" class="text-danger"></span>
+              </div>
+
               <button type="submit" class="btn btn-bd-primary w-100">
                 Submit
               </button>

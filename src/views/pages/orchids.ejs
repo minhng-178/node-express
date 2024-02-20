@@ -47,11 +47,21 @@
                     <th scope="col">Name</th>
                     <th scope="col">Color</th>
                     <th scope="col">Original</th>
+                    <th scope="col">Category</th>
                     <th scope="col">Price</th>
                     <th scope="col">Is Natural</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
+                <% if(orchids.length === 0) { %>
+                <tbody>
+                  <tr>
+                    <td colspan="12" class="h4 text-center">
+                      No orchids found
+                    </td>
+                  </tr>
+                </tbody>
+                <% } else { %>
                 <tbody>
                   <% orchids.forEach(function(orchid,index){ %>
                   <tr>
@@ -64,6 +74,7 @@
                     <td><%= orchid.name %></td>
                     <td><%= orchid.color %></td>
                     <td><%= orchid.original %></td>
+                    <td><%= orchid.category.name %></td>
                     <td><%= orchid.price %></td>
                     <td><%= orchid.isNatural ? 'Yes' : 'No' %></td>
                     <td>
@@ -118,6 +129,7 @@
                   </form>
                   <% })%>
                 </tbody>
+                <% } %>
               </table>
             </div>
             <div class="d-flex justify-content-center my-3">

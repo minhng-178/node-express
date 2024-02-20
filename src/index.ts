@@ -10,9 +10,9 @@ import cookieParser from "cookie-parser";
 import methodOverride from "method-override";
 
 import router from "./routers";
+import { User } from "./models/users";
 import { connectDB } from "./configs/db";
 import { uploadCloud } from "./configs/cloudinary";
-import { User } from "./models/users";
 
 dotenv.config();
 
@@ -65,25 +65,8 @@ app.use(async (req, res, next) => {
   }
   next();
 });
-
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-
-app.get("/", function (req: express.Request, res: express.Response) {
-  res.render("pages/home");
-});
-
-app.get("/about", function (req: express.Request, res: express.Response) {
-  res.render("pages/about");
-});
-
-app.get("/login", function (req: express.Request, res: express.Response) {
-  res.render("pages/login");
-});
-
-app.get("/register", function (req: express.Request, res: express.Response) {
-  res.render("pages/register");
-});
 
 app.post("/upload", uploadCloud.single("image"), (req, res) => {
   if (!req.file) {

@@ -1,5 +1,10 @@
 import express from "express";
-import { deleteUserById, getUserById, getUsers } from "../models/users";
+import {
+  deleteUserById,
+  getTotalPages,
+  getUserById,
+  getUsers,
+} from "../models/users";
 
 export const getAllUsers = async (
   req: express.Request,
@@ -8,12 +13,37 @@ export const getAllUsers = async (
   try {
     const page = parseInt(req.query.page as string) || 1;
 
-    const users = await getUsers();
+    const users = await getUsers(page);
+    const totalPages = await getTotalPages();
 
-    return res.status(200).json(users);
+    return res.render("pages/users", {
+      users: users,
+      page: page,
+      totalPages: totalPages,
+    });
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);
+  }
+};
+
+export const getUserProfile = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { id } = req.params;
+
+    const user = getUserById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.render("pages/profile", { user: user });
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
