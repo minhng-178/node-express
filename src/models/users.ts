@@ -1,11 +1,14 @@
 import mongoose, { Document, Schema } from "mongoose";
+import slugify from "slugify";
 
 export interface IUser extends Document {
   email: string;
-  username: string;
   name: string;
+  avatar: string;
+  slug: string;
   YOB: number;
   isAdmin: boolean;
+  bio: string;
   authentication: {
     password: string;
     salt: string;
@@ -19,6 +22,7 @@ const UserSchema: Schema = new Schema(
   {
     email: { type: String, required: true },
     name: { type: String, required: true },
+    slug: { type: String, require: true },
     YOB: { type: Number, required: false },
     isAdmin: { type: Boolean, default: false },
     avatar: {
@@ -43,13 +47,11 @@ const RESULTS_PER_PAGE = 5;
 
 export const getUsers = (page = 1, name = "") => {
   const skip = (page - 1) * RESULTS_PER_PAGE;
-  return User.find({ name: new RegExp(name, "i") })
+  return User.find({ name: new RegExp(name, "i"), isAdmin: false })
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(RESULTS_PER_PAGE);
 };
-
-// export const getUsers = () => User.find().sort({ createdAt: -1 });
 
 export const getTotalPages = async () => {
   const totalUsers = await User.countDocuments();
@@ -57,6 +59,7 @@ export const getTotalPages = async () => {
 };
 
 export const getUserByEmail = (email: string) => User.findOne({ email });
+export const getUserBySlug = (slug: string) => User.findOne({ slug: slug });
 export const getUserBySessionToken = (sessionToken: string) =>
   User.findOne({ "authentication.sessionToken": sessionToken });
 export const getUserByRefreshToken = (refreshToken: string) =>
@@ -69,7 +72,8 @@ export const getUserById = (id: string) => User.findById(id);
 export const getUserByUsername = (username: string) =>
   User.findOne({ username });
 export const createUser = (values: Record<string, any>) => {
-  return new User({ ...values }).save().then((User) => User.toObject());
+  const slug = slugify(values.name, { lower: true });
+  return new User({ ...values, slug }).save().then((User) => User.toObject());
 };
 export const deleteUserById = (id: string) =>
   User.findOneAndDelete({ _id: id });

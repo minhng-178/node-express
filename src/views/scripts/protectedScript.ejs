@@ -1,0 +1,110 @@
+<script>
+  function validateForm() {
+    let isValid = true;
+
+    // User Avatar validation
+    const avatar = document.getElementById("avatar");
+    if (avatar.value.trim() === "") {
+      document.getElementById("avatarError").textContent =
+        "User Avatar is required";
+      isValid = false;
+    } else {
+      document.getElementById("avatarError").textContent = "";
+    }
+
+    // User Name validation
+    const name = document.getElementById("name");
+    if (name.value.trim() === "") {
+      document.getElementById("nameError").textContent =
+        "User Name is required";
+      isValid = false;
+    } else {
+      document.getElementById("nameError").textContent = "";
+    }
+
+    // User Email validation
+    const email = document.getElementById("email");
+    if (email.value.trim() === "") {
+      document.getElementById("emailError").textContent =
+        "User Email is required";
+      isValid = false;
+    } else {
+      document.getElementById("emailError").textContent = "";
+    }
+
+    return isValid;
+  }
+
+  const form = document.querySelector(".form-bordered");
+  form.addEventListener("submit", updateProfile);
+
+  async function updateProfile(e) {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "An error occurred!",
+      });
+    }
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, update it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+
+        console.log(data);
+
+        const response = fetch(form.action, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }).then((response) => {
+          if (response.ok) {
+            Swal.fire({
+              icon: "success",
+              title: "Profile updated successfully",
+              text: `Your changes have been saved, ${name}!`,
+            }).then(() => {
+              window.location.reload();
+            });
+          } else {
+            if (response.status === 400) {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "A user account with this email already exists!",
+              });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Failed to update profile",
+                text: "Please check your information",
+                footer: '<a href="#">Why do I have this issue?</a>',
+              });
+            }
+          }
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire({
+          title: "Cancelled",
+          text: "Your account information is safe :)",
+          icon: "error",
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+    });
+  }
+</script>

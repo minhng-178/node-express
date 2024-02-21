@@ -123,6 +123,7 @@ export const getOrchid = async (
   try {
     const orchid = await getOrchidById(req.params.orchidId);
     const categories = await getCategories();
+
     if (orchid) {
       res.render("pages/orchid", {
         orchid: orchid,

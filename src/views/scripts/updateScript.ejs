@@ -120,7 +120,7 @@
               title: "Success!",
               text: "Updated successfully!",
             }).then(() => {
-              window.location.href = `/orchids/${data._id}`;
+              window.location.reload();
             });
           } else {
             Swal.fire({
@@ -135,6 +135,8 @@
           title: "Cancelled",
           text: "Your orchid is safe :)",
           icon: "error",
+        }).then(() => {
+          window.location.reload();
         });
       }
     });

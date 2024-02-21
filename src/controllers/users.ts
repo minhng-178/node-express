@@ -2,7 +2,9 @@ import express from "express";
 import {
   deleteUserById,
   getTotalPages,
+  getUserByEmail,
   getUserById,
+  getUserBySlug,
   getUsers,
 } from "../models/users";
 
@@ -32,9 +34,7 @@ export const getUserProfile = async (
   res: express.Response
 ) => {
   try {
-    const { id } = req.params;
-
-    const user = getUserById(id);
+    const user = await getUserBySlug(req.params.slug);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -68,19 +68,31 @@ export const updateUser = async (
   res: express.Response
 ) => {
   try {
-    const { id } = req.params;
-    const { name } = req.body;
+    const { slug } = req.params;
+    const { avatar, name, email, bio, YOB } = req.body;
 
-    if (!name) {
-      return res.sendStatus(400);
+    if (!name || !email || !avatar) {
+      return res.sendStatus(401);
     }
 
-    const user = await getUserById(id);
+    const user = await getUserBySlug(slug);
 
+    if (email !== user.email) {
+      const existingUser = await getUserByEmail(email);
+
+      if (existingUser) {
+        return res.status(400).json({ message: "Email already exists" }).end();
+      }
+
+      user.email = email;
+    }
+    user.avatar = avatar;
     user.name = name;
+    user.bio = bio;
+    user.YOB = YOB;
     await user.save();
 
-    return res.status(200).json(user).end();
+    return res.status(200).render("pages/profile");
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head')-%>
+  <body>
+    <main>
+      <%- include('../partials/nav')-%>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card">
+              <img
+                src="<%= user.avatar %>"
+                class="card-img-top"
+                alt="User Avatar"
+              />
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="fas fa-user"></i> <%= user.name %>
+                </h5>
+                <% if (user.bio) { %>
+                <p class="card-text">
+                  <i class="fas fa-info-circle"></i> <%= user.bio %>
+                </p>
+                <% } else { %>
+                <p class="card-text">
+                  <i class="fas fa-info-circle"></i> This user hasn't added a
+                  bio yet.
+                </p>
+                <% } %>
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <i class="fas fa-envelope"></i> Email: <%= user.email %>
+                </li>
+                <% if (user.YOB) { %>
+                <li class="list-group-item">
+                  <i class="fas fa-birthday-cake"></i> Year of Birth: <%=
+                  user.YOB %>
+                </li>
+                <% } else { %>
+                <li class="list-group-item">
+                  <i class="fas fa-birthday-cake"></i> Year of Birth: Not
+                  provided
+                </li>
+                <% } %>
+                <li class="list-group-item">
+                  <% if (user.isAdmin) { %>
+                  <i class="fas fa-user-shield"></i> Admin:
+                  <i class="fas fa-check-circle text-success"></i>
+                  <% } else { %>
+                  <i class="fas fa-user-shield"></i> Admin:
+                  <i class="fas fa-times-circle text-danger"></i>
+                  <% } %>
+                </li>
+              </ul>
+              <div class="card-body">
+                <div class="dropdown">
+                  <button
+                    class="btn btn-secondary dropdown-toggle"
+                    type="button"
+                    id="dropdownMenuButton"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <i class="fas fa-ellipsis-v"></i>
+                  </button>
+                  <ul
+                    class="dropdown-menu"
+                    aria-labelledby="dropdownMenuButton"
+                  >
+                    <li>
+                      <a href="#" class="dropdown-item"
+                        ><i class="fas fa-edit"></i> Change Password</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#" class="dropdown-item"
+                        ><i class="fas fa-phone"></i> Contact Us</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="fas fa-edit"></i> Edit Profile
+                </h5>
+                <form
+                  action="/users/edit-profile/<%= user.slug %>?_method=PUT"
+                  method="POST"
+                  enctype="multipart/form-data"
+                  class="form-bordered"
+                >
+                  <div class="mb-3">
+                    <label for="avatar" class="form-label">Avatar</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="avatar"
+                      name="avatar"
+                      value="<%= user.avatar %>"
+                    />
+                    <span id="avatarError" class="text-danger"></span>
+                  </div>
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="name"
+                      name="name"
+                      value="<%= user.name %>"
+                    />
+                    <span id="nameError" class="text-danger"></span>
+                  </div>
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      name="email"
+                      value="<%= user.email %>"
+                    />
+                    <span id="emailError" class="text-danger"></span>
+                  </div>
+                  <div class="mb-3">
+                    <label for="YOB" class="form-label">Year of Birth</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="YOB"
+                      name="YOB"
+                      value="<%= user.YOB %>"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="bio" class="form-label">Bio</label>
+                    <textarea class="form-control" id="bio" name="bio" rows="3">
+<%= user.bio %></textarea
+                    >
+                  </div>
+
+                  <div class="text-end">
+                    <button type="submit" class="btn btn-bd-primary">
+                      <i class="fas fa-save"></i> Save Changes
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%- include('../partials/footer')-%>
+    </main>
+  </body>
+  <%-include('../scripts/protectedScript')-%>
+  <%-include('../scripts/globalScript')-%>
+</html>

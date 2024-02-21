@@ -2,7 +2,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import { merge, get } from "lodash";
 
-import { User, getUserById } from "../models/users";
+import { User, getUserById, getUserBySlug } from "../models/users";
 
 export const isAuthenticated = async (
   req: express.Request,
@@ -85,15 +85,30 @@ export const isOwner = async (
   next: express.NextFunction
 ) => {
   try {
-    const { id } = req.params;
+    const { id, slug } = req.params;
     const currentUserId = get(req, "user._id") as string;
 
     if (!currentUserId) {
       return res.sendStatus(400);
     }
 
-    if (currentUserId.toString() !== id) {
+    // If both id and slug are not provided
+    if (!id && !slug) {
+      return res.sendStatus(400);
+    }
+
+    // If id is provided, check if it matches the current user's id
+    if (id && currentUserId.toString() !== id) {
       return res.sendStatus(403);
+    }
+
+    // If slug is provided, retrieve the user with this slug and check if it matches the current user
+    if (slug) {
+      const user = await getUserBySlug(slug);
+      // Assuming User is your user model
+      if (!user || user._id.toString() !== currentUserId.toString()) {
+        return res.sendStatus(403);
+      }
     }
 
     next();

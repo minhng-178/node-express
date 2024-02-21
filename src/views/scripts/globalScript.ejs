@@ -1,4 +1,26 @@
 <script>
+  window.onload = function () {
+    var path = window.location.pathname;
+
+    path = path.replace(/^\/|\/$/g, "");
+
+    var navbar = document.getElementById("navbar");
+
+    var links = navbar.querySelectorAll(".nav-link");
+
+    for (var i = 0; i < links.length; i++) {
+      var href = links[i].getAttribute("href").replace(/^\/|\/$/g, "");
+
+      if (path === href) {
+        links[i].classList.add("link-secondary");
+        links[i].classList.remove("link-dark");
+      } else {
+        links[i].classList.add("link-dark");
+        links[i].classList.remove("link-secondary");
+      }
+    }
+  };
+
   document
     .getElementById("logoutButton")
     .addEventListener("click", function (e) {

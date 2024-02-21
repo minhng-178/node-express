@@ -54,17 +54,20 @@ app.use(async (req, res, next) => {
         res.locals.user = user;
         res.locals.isLoggedIn = true;
       } else {
+        console.log("No user found for this refreshToken:", refreshToken);
         res.locals.isLoggedIn = false;
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error in middleware:", error);
       res.locals.isLoggedIn = false;
     }
   } else {
+    console.log("No refreshToken found");
     res.locals.isLoggedIn = false;
   }
   next();
 });
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 

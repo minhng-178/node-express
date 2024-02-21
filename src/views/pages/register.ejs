@@ -285,12 +285,20 @@
             window.location.href = "/login";
           });
         } else {
-          Swal.fire({
-            icon: "error",
-            title: "Failed to register",
-            text: "Please check your information",
-            footer: '<a href="#">Why do I have this issue?</a>',
-          });
+          if (response.status === 400) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "A user account with this gmail already exists!",
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Failed to register",
+              text: "Please check your information",
+              footer: '<a href="#">Why do I have this issue?</a>',
+            });
+          }
         }
       }
     </script>
