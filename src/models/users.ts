@@ -88,3 +88,17 @@ export const deleteOldestUser = async () => {
   }
   return User.findOneAndDelete(oldestUser._id);
 };
+
+export const changeNewPassword = async (
+  email: string,
+  newSalt: string,
+  newHash: string
+) => {
+  const user = await getUserByEmail(email);
+  if (!user) {
+    throw new Error("User not found");
+  }
+  user.authentication.salt = newSalt;
+  user.authentication.password = newHash;
+  return user.save();
+};

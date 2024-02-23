@@ -1,9 +1,13 @@
 <script>
+  const avatar = document.getElementById("avatar");
+  const name = document.getElementById("name");
+  const email = document.getElementById("email");
+  const fullName = name.value;
+
   function validateForm() {
     let isValid = true;
 
     // User Avatar validation
-    const avatar = document.getElementById("avatar");
     if (avatar.value.trim() === "") {
       document.getElementById("avatarError").textContent =
         "User Avatar is required";
@@ -13,7 +17,6 @@
     }
 
     // User Name validation
-    const name = document.getElementById("name");
     if (name.value.trim() === "") {
       document.getElementById("nameError").textContent =
         "User Name is required";
@@ -23,7 +26,6 @@
     }
 
     // User Email validation
-    const email = document.getElementById("email");
     if (email.value.trim() === "") {
       document.getElementById("emailError").textContent =
         "User Email is required";
@@ -62,8 +64,6 @@
         const formData = new FormData(form);
         const data = Object.fromEntries(formData);
 
-        console.log(data);
-
         const response = fetch(form.action, {
           method: "POST",
           headers: {
@@ -75,7 +75,7 @@
             Swal.fire({
               icon: "success",
               title: "Profile updated successfully",
-              text: `Your changes have been saved, ${name}!`,
+              text: `Your changes have been saved, ${fullName}!`,
             }).then(() => {
               window.location.reload();
             });
@@ -107,4 +107,76 @@
       }
     });
   }
+
+  document
+    .querySelector('p[name="change-password"]')
+    .addEventListener("click", function () {
+      const email = this.getAttribute("data-email"); // Get the email from the data-email attribute
+
+      Swal.fire({
+        title: "Change Password",
+        html:
+          '<input type="hidden" id="swal-input0" value="' +
+          email +
+          '">' +
+          '<input type="password" id="swal-input1" class="swal2-input" placeholder="Old Password">' +
+          '<input type="password" id="swal-input2" class="swal2-input" placeholder="New Password">' +
+          '<input type="password" id="swal-input3" class="swal2-input" placeholder="Confirm New Password">',
+        focusConfirm: false,
+        preConfirm: () => {
+          const email = document.getElementById("swal-input0").value;
+          const oldPassword = document.getElementById("swal-input1").value;
+          const newPassword = document.getElementById("swal-input2").value;
+          const confirmPassword = document.getElementById("swal-input3").value;
+
+          if (!oldPassword || !newPassword || !confirmPassword) {
+            Swal.showValidationMessage("All fields are required");
+          } else if (newPassword === oldPassword) {
+            Swal.showValidationMessage(
+              "New password must be different from old password"
+            );
+          } else if (newPassword !== confirmPassword) {
+            Swal.showValidationMessage("New passwords do not match");
+          } else {
+            return { email, oldPassword, newPassword };
+          }
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Send a request to the server to change the password
+          fetch("/auth/change-password", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(result.value),
+          }).then((response) => {
+            if (response.ok) {
+              Swal.fire({
+                icon: "success",
+                title: "Password changed successfully",
+                text: `Your changes have been saved, ${fullName}!`,
+              }).then(() => {
+                window.location.reload();
+              });
+            } else {
+              if (response.status === 403) {
+                Swal.fire({
+                  icon: "error",
+                  title: "Failed to change password",
+                  text: "Invalid old password! Please try again.",
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Failed to change password",
+                  text: "Please check your information",
+                  footer: '<a href="#">Why do I have this issue?</a>',
+                });
+              }
+            }
+          });
+        }
+      });
+    });
 </script>

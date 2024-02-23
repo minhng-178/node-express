@@ -13,9 +13,10 @@ export const getAllUsers = async (
   res: express.Response
 ) => {
   try {
+    const name = (req.query.name as string) || "";
     const page = parseInt(req.query.page as string) || 1;
 
-    const users = await getUsers(page);
+    const users = await getUsers(page, name);
     const totalPages = await getTotalPages();
 
     return res.render("pages/users", {

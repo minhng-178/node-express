@@ -1,7 +1,11 @@
 import express from "express";
 import jwt from "jsonwebtoken";
-
-import { User, createUser, getUserByEmail } from "../models/users";
+import {
+  User,
+  changeNewPassword,
+  createUser,
+  getUserByEmail,
+} from "../models/users";
 import { authentication, random } from "../helpers";
 
 export const login = async (req: express.Request, res: express.Response) => {
@@ -168,5 +172,44 @@ export const logout = async (req: express.Request, res: express.Response) => {
     return res
       .status(400)
       .json({ message: "An error occurred during logout." });
+  }
+};
+
+export const changePassword = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { email, oldPassword, newPassword } = req.body;
+
+    if (!email || !oldPassword || !newPassword) {
+      return res.status(400).json({
+        message: "Email, old password and new password are required.",
+      });
+    }
+
+    const user = await getUserByEmail(email).select(
+      "+authentication.salt +authentication.password"
+    );
+
+    if (!user) {
+      return res.status(401).json({ message: "User not found." });
+    }
+
+    const expectedHash = authentication(user.authentication.salt, oldPassword);
+
+    if (user.authentication.password != expectedHash) {
+      return res.status(403).json({ message: "Invalid old password." });
+    }
+
+    const newSalt = random();
+    const newHash = authentication(newSalt, newPassword);
+
+    await changeNewPassword(email, newSalt, newHash);
+
+    return res.status(200).json({ message: "Password changed successfully." });
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(400);
   }
 };

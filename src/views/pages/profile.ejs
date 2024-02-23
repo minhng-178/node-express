@@ -69,9 +69,13 @@
                     aria-labelledby="dropdownMenuButton"
                   >
                     <li>
-                      <a href="#" class="dropdown-item"
-                        ><i class="fas fa-edit"></i> Change Password</a
+                      <p
+                        class="dropdown-item"
+                        name="change-password"
+                        data-email="<%= user.email %>"
                       >
+                        <i class="fas fa-edit"></i> Change Password
+                      </p>
                     </li>
                     <li>
                       <a href="#" class="dropdown-item"

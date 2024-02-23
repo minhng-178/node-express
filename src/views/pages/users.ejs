@@ -10,6 +10,32 @@
             <div class="text-center mb-3">
               <h4 class="section-title">User List</h4>
             </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Search User"
+                    id="searchUser"
+                  />
+                  <button
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    id="searchButton"
+                  >
+                    <i class="fas fa-search"></i>
+                  </button>
+                  <button
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    id="clearButton"
+                  >
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
             <table class="table table-hover table-bordered">
               <thead>
                 <tr>
@@ -19,6 +45,13 @@
                   <th scope="col">Email</th>
                 </tr>
               </thead>
+              <% if(users.length === 0) { %>
+              <tbody>
+                <tr>
+                  <td colspan="12" class="h4 text-center">No users found</td>
+                </tr>
+              </tbody>
+              <% } else { %>
               <tbody>
                 <% users.forEach(function(user,index){ %>
                 <tr>
@@ -33,6 +66,7 @@
                 </tr>
                 <% })%>
               </tbody>
+              <% } %>
             </table>
             <div class="d-flex justify-content-center my-3">
               <nav aria-label="Page navigation">
@@ -64,6 +98,29 @@
       </div>
       <%- include('../partials/footer')-%>
     </main>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchTerm = urlParams.get("name") || "";
+
+      document.getElementById("searchUser").value = searchTerm;
+
+      document
+        .getElementById("searchButton")
+        .addEventListener("click", function () {
+          const searchValue = document.getElementById("searchUser").value;
+          window.location.href =
+            window.location.pathname +
+            "?name=" +
+            encodeURIComponent(searchValue);
+        });
+
+      document
+        .getElementById("clearButton")
+        .addEventListener("click", function () {
+          document.getElementById("searchUser").value = "";
+          window.location.href = window.location.pathname;
+        });
+    </script>
     <%-include('../scripts/globalScript')-%>
   </body>
 </html>
