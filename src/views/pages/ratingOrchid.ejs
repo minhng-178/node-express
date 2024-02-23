@@ -1,0 +1,101 @@
+<% if (locals.user) { %>
+<form
+  action="/orchidDetail/<%= orchid.slug %>/comments"
+  method="POST"
+  class="form-bordered"
+>
+  <div class="mb-3">
+    <label for="comment" class="form-label h4">New Comment</label>
+    <input type="hidden" name="author" value="<%= locals.user._id %>" />
+    <input type="hidden" name="orchid" value="<%= orchid._id %>" />
+    <input type="hidden" id="rating" name="rating" value="0" />
+    <textarea class="form-control" id="comment" name="comment"></textarea>
+    <div class="d-flex justify-content-between">
+      <div class="dropdown">
+        <button
+          class="btn btn-white"
+          type="button"
+          id="dropdownMenuButton"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <span style="font-size: 1.5em">😀</span> Emoji
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <li><emoji-picker class="light"></emoji-picker></li>
+        </ul>
+      </div>
+      <button
+        type="button"
+        class="btn btn-outline-warning btn-sm m-2"
+        data-bs-toggle="modal"
+        data-bs-target="#ratingModal"
+      >
+        <i class="fa fa-star checked"></i> Rating Orchid
+      </button>
+      <div
+        class="modal fade"
+        id="ratingModal"
+        tabindex="-1"
+        aria-labelledby="ratingModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="ratingModalLabel">
+                Rating Star for Orchid
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                onclick="resetRating()"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="card">
+                <div class="d-flex justify-content-center">
+                  <% for(let i=1; i<=5; i++) { %>
+                  <span
+                    onmouseover="highlight(<%= i %>)"
+                    onclick="gfg(<%= i %>)"
+                    class="star"
+                    >★</span
+                  >
+                  <% } %>
+                </div>
+                <h3 id="output" class="text-center">Rating is: 0/5</h3>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                onclick="resetRating()"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                id="saveButton"
+                onclick="saveRating()"
+              >
+                Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-end">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>
+<% } else { %>
+<p class="text-danger-emphasis">Please log in to post a comment.</p>
+<% } %>

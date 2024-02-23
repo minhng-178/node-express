@@ -40,9 +40,10 @@ export const getAllOrchids = async (
 ) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
+    const name = (req.query.name as string) || "";
 
     const totalPages = await getTotalPages();
-    const orchids = await getOrchids(page);
+    const orchids = await getOrchids(page, name);
     const orchid = await getOrchidById(req.params.orchidId);
 
     if (!orchids) {
@@ -158,6 +159,11 @@ export const updateOrchid = async (
   next: express.NextFunction
 ) => {
   try {
+    const duplicateOrchid = await getOrchidByName(req.body.name);
+    if (duplicateOrchid && duplicateOrchid._id != req.params.orchidId) {
+      return res.status(400).end("Duplicate name found!");
+    }
+
     const updatedOrchid = await updateOrchidById(req.params.orchidId, req.body);
 
     if (updatedOrchid) {

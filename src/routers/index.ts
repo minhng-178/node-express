@@ -5,6 +5,7 @@ import global from "./global";
 import orchids from "./orchids";
 import category from "./category";
 import authentication from "./authentication";
+import comments from "./comments";
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ export default (): express.Router => {
   category(router);
   orchids(router);
   users(router);
+  comments(router);
   authentication(router);
 
   return router;

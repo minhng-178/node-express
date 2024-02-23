@@ -42,7 +42,7 @@ const OrchidSchema: Schema = new Schema(
 export const Orchid = mongoose.model<IOrchid>("Orchid", OrchidSchema);
 
 //Orchids action
-const RESULTS_PER_PAGE = 5;
+const RESULTS_PER_PAGE = 6;
 
 export const getOrchids = (page = 1, name = "") => {
   const skip = (page - 1) * RESULTS_PER_PAGE;
@@ -60,8 +60,20 @@ export const getTotalPages = async () => {
 
 export const getOrchidByName = (name: string) => Orchid.findOne({ name });
 export const getOrchidById = (id: string) => Orchid.findById(id);
-export const getOrchidBySlug = (slug: string) =>
-  Orchid.findOne({ slug: slug }).populate("category", "name");
+export const getOrchidBySlug = (slug: string) => {
+  return Orchid.findOne({ slug: slug })
+    .populate({
+      path: "comments",
+      populate: {
+        path: "author",
+        select: "avatar email",
+      },
+    })
+    .then((orchid) => {
+      return orchid.toObject();
+    });
+};
+
 export const createOrchid = (values: Record<string, any>) => {
   const slug = slugify(values.name, { lower: true });
   return new Orchid({ ...values, slug })

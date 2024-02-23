@@ -53,14 +53,4 @@
         }
       });
     });
-
-  function rateOrchid(rating, orchidId) {
-    var stars = document.querySelectorAll(`.star-${orchidId}`);
-
-    stars.forEach((star) => (star.style.color = "black"));
-
-    for (let i = 0; i < rating; i++) {
-      stars[i].style.color = "gold";
-    }
-  }
 </script>

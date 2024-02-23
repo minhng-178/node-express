@@ -1,4 +1,22 @@
 <script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchTerm = urlParams.get("name") || "";
+
+  document.getElementById("searchOrchid").value = searchTerm;
+
+  document
+    .getElementById("searchButton")
+    .addEventListener("click", function () {
+      const searchValue = document.getElementById("searchOrchid").value;
+      window.location.href =
+        window.location.pathname + "?name=" + encodeURIComponent(searchValue);
+    });
+
+  document.getElementById("clearButton").addEventListener("click", function () {
+    document.getElementById("searchOrchid").value = "";
+    window.location.href = window.location.pathname;
+  });
+
   document.querySelectorAll(".btn-danger").forEach((button) => {
     button.addEventListener("click", function (event) {
       event.preventDefault();

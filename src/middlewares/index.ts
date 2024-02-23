@@ -99,7 +99,7 @@ export const isOwner = async (
 
     // If id is provided, check if it matches the current user's id
     if (id && currentUserId.toString() !== id) {
-      return res.sendStatus(403);
+      return res.sendStatus(402);
     }
 
     // If slug is provided, retrieve the user with this slug and check if it matches the current user

@@ -4,7 +4,7 @@
     name="viewport"
     content="width=device-width, initial-scale=1, shrink-to-fit=no"
   />
-  <title>Orchids Dashboard</title>
+  <title>Orchids Workshop</title>
   <link rel="icon" type="image/x-icon" href="/images/flower-70.ico" />
   <meta name="theme-color" content="#563d7c" />
 
@@ -35,6 +35,12 @@
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+  <script
+    type="module"
+    src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"
+  ></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -55,6 +61,39 @@
       --bs-btn-active-color: var(--bs-btn-hover-color);
       --bs-btn-active-bg: #5a23c8;
       --bs-btn-active-border-color: #5a23c8;
+    }
+
+    .star {
+      font-size: 50px;
+      cursor: pointer;
+    }
+
+    .one {
+      color: gold;
+    }
+
+    .two {
+      color: gold;
+    }
+
+    .three {
+      color: gold;
+    }
+
+    .four {
+      color: gold;
+    }
+
+    .five {
+      color: gold;
+    }
+
+    .fa-star.checked {
+      color: gold;
+    }
+
+    .fa-heart:hover {
+      color: red;
     }
 
     /*product list*/
@@ -197,14 +236,6 @@
     .pro-d-head {
       font-size: 18px;
       font-weight: 300;
-    }
-
-    .fa-star:hover {
-      color: gold;
-    }
-
-    .fa-heart:hover {
-      color: red;
     }
 
     .table-img {

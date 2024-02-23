@@ -1,3 +1,4 @@
+import moment from "moment";
 import express from "express";
 import { originalData } from "./orchids";
 import {
@@ -61,6 +62,7 @@ export const getOrchidDetailPage = async (
   if (orchid) {
     res.render("pages/orchidDetail", {
       orchid: orchid,
+      moment: moment,
       categoriesList: categories,
       originalList: originalData,
     });

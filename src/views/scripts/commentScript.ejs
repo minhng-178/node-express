@@ -1,0 +1,201 @@
+<script>
+  const picker = document.querySelector("emoji-picker");
+  const textarea = document.querySelector("#comment");
+  let stars = document.getElementsByClassName("star");
+  let output = document.getElementById("output");
+  let rating = 0;
+
+  picker.addEventListener("emoji-click", (event) => {
+    textarea.value += event.detail.unicode;
+  });
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
+
+  function gfg(n) {
+    remove();
+    rating = n;
+    document.getElementById("rating").value = n;
+    for (let i = 0; i < n; i++) {
+      let cls = "";
+      if (n == 1) cls = "one";
+      else if (n == 2) cls = "two";
+      else if (n == 3) cls = "three";
+      else if (n == 4) cls = "four";
+      else if (n == 5) cls = "five";
+      stars[i].className = "star " + cls;
+    }
+    output.innerText = "Rating is: " + n + "/5";
+  }
+
+  function saveRating() {
+    console.log("Saved rating: " + rating);
+    Toast.fire({
+      icon: "success",
+      title: "Rating successfully",
+    });
+
+    $("#ratingModal").modal("hide");
+  }
+
+  function highlight(n) {
+    remove();
+    for (let i = 0; i < n; i++) {
+      if (n == 1) cls = "one";
+      else if (n == 2) cls = "two";
+      else if (n == 3) cls = "three";
+      else if (n == 4) cls = "four";
+      else if (n == 5) cls = "five";
+      stars[i].className = "star " + cls;
+    }
+  }
+
+  function remove() {
+    let i = 0;
+    while (i < 5) {
+      stars[i].className = "star";
+      i++;
+    }
+  }
+
+  function resetRating() {
+    remove();
+    output.innerText = "Rating is: 0/5";
+  }
+
+  function validateForm() {
+    const comment = document.getElementById("comment").value;
+    const rating = document.getElementById("rating").value;
+
+    if (!comment || !rating || rating == "0") {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please provide both a comment and a rating before submitting.",
+      });
+      return false;
+    }
+
+    return true;
+  }
+
+  const form = document.querySelector(".form-bordered");
+  form.addEventListener("submit", submitForm);
+
+  async function submitForm(e) {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+
+    try {
+      const response = await fetch(
+        "/orchidDetail/<%= orchid.slug %>/comments",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      console.log(response.body);
+
+      if (response.ok) {
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Added successfully!",
+        }).then(() => {
+          window.location.reload();
+        });
+      } else {
+        if (response.status === 400) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "You only allow to post the comment once for each Orchid!",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "An error occurred!",
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "An error occurred!",
+      });
+    }
+  }
+  document.querySelectorAll("[name='deleteBtn']").forEach((button) => {
+    button.addEventListener("click", function (event) {
+      event.preventDefault();
+
+      const commentId = this.getAttribute("data-id");
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: `You are about to delete this comment. You won't be able to revert this!`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(
+            `/orchidDetail/<%= orchid.slug %>/comments/${commentId}?_method=DELETE`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          ).then((response) => {
+            if (response.ok) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your comment has been deleted.",
+                icon: "success",
+              }).then(() => {
+                location.reload();
+              });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "An error occurred!",
+              });
+            }
+          });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire({
+            title: "Cancelled",
+            text: "Your comment is safe :)",
+            icon: "error",
+          });
+        }
+      });
+    });
+  });
+</script>

@@ -1,0 +1,59 @@
+<!-- Comments -->
+<h4>Comments</h4>
+<% orchid.comments.forEach(function(comment) { %>
+<div class="card mb-3">
+  <div class="card-header">
+    <img
+      src="<%= comment.author.avatar %>"
+      alt="Avatar"
+      class="rounded-circle"
+      width="30"
+      height="30"
+    />
+    <strong><%= comment.author.email %></strong>
+
+    <div class="float-end">
+      <% for(let i = 0; i < comment.rating; i++) { %>
+      <span class="fa fa-star checked"></span>
+      <% } %> <% for(let i = comment.rating; i < 5; i++) { %>
+      <span class="fa fa-star"></span>
+      <% } %>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center">
+      <p class="card-text"><%= comment.comment %></p>
+      <div class="d-flex justify-content-between align-items-center">
+        <small class="text-muted"
+          ><%= moment(comment.createdAt).fromNow() %></small
+        >
+        <% if (locals.user && locals.user._id.toString() ===
+        comment.author._id.toString()) { %>
+        <div class="dropdown">
+          <button
+            class="btn btn-white"
+            type="button"
+            id="dropdownMenuButton"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <span style="font-size: 1.5em">⋮</span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li>
+              <button
+                name="deleteBtn"
+                class="dropdown-item"
+                data-id="<%= comment._id %>"
+              >
+                <i class="fa-solid fa-trash"></i> Delete
+              </button>
+            </li>
+          </ul>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+<% }); %>

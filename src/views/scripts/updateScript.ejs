@@ -123,11 +123,19 @@
               window.location.reload();
             });
           } else {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "An error occurred!",
-            });
+            if (response.status === 400) {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Duplicate name found!",
+              });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "An error occurred!",
+              });
+            }
           }
         });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
