@@ -4,11 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index",
+    "start": "nodemon src/index.ts",
+    "build": "rimraf dist && tsc",
+    "ts.check": "tsc --project tsconfig.json",
+    "add-build": "git add dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
+   "pre-commit": [
+      "ts.check",
+      "build",
+      "add-build"
+  ],
   "dependencies": {
     "body-parser": "^1.20.2",
     "cloudinary": "^1.41.3",
@@ -40,6 +48,8 @@
     "@types/lodash": "^4.14.202",
     "@types/method-override": "^0.0.35",
     "@types/morgan": "^1.9.9",
-    "@types/multer": "^1.4.11"
+    "@types/multer": "^1.4.11",
+    "pre-commit": "^1.2.2",
+    "rimraf": "^5.0.5"
   }
 }
