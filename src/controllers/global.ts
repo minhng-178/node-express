@@ -61,6 +61,13 @@ export const getLoginPage = async (
   res.render("pages/login");
 };
 
+export const getError404Page = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  res.render("pages/404");
+};
+
 export const getRegisterPage = async (
   req: express.Request,
   res: express.Response

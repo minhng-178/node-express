@@ -13,7 +13,7 @@ export const isAuthenticated = async (
     const refreshToken = req.cookies.jwt;
 
     if (!refreshToken) {
-      return res.status(403).json({ message: "No refresh token provided." });
+      return res.status(403).render("pages/404");
     }
 
     // Verify the refresh token
@@ -67,7 +67,7 @@ export const isAdmin = async (
     }
 
     if (!currentUser.isAdmin) {
-      return res.status(403).json({ message: "User is not an admin." });
+      return res.status(403).render("pages/404");
     }
 
     next();
@@ -99,7 +99,7 @@ export const isOwner = async (
 
     // If id is provided, check if it matches the current user's id
     if (id && currentUserId.toString() !== id) {
-      return res.sendStatus(402);
+      return res.status(402).render("pages/404");
     }
 
     // If slug is provided, retrieve the user with this slug and check if it matches the current user
@@ -107,7 +107,7 @@ export const isOwner = async (
       const user = await getUserBySlug(slug);
       // Assuming User is your user model
       if (!user || user._id.toString() !== currentUserId.toString()) {
-        return res.sendStatus(403);
+        return res.status(403).render("pages/404");
       }
     }
 

@@ -2,6 +2,7 @@ import express from "express";
 
 import {
   getAboutPage,
+  getError404Page,
   getHomePage,
   getLoginPage,
   getOrchidDetailPage,
@@ -13,5 +14,6 @@ export default (router: express.Router) => {
   router.get("/about", getAboutPage);
   router.get("/login", getLoginPage);
   router.get("/register", getRegisterPage);
+  router.get("/not-found", getError404Page);
   router.get("/orchidDetail/:slug", getOrchidDetailPage);
 };

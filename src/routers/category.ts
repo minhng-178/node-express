@@ -12,7 +12,7 @@ import {
 import { isAdmin, isAuthenticated } from "../middlewares";
 
 export default (router: express.Router) => {
-  router.get("/categories", isAuthenticated, getAllCategories);
+  router.get("/categories", isAuthenticated, isAdmin, getAllCategories);
   router.post("/categories", isAuthenticated, isAdmin, addCategory);
   router.put("/categories", isAuthenticated, isAdmin, updateCategories);
   router.delete("/categories", isAuthenticated, isAdmin, deleteCategories);
