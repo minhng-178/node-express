@@ -21,13 +21,12 @@
             <div>
               <h1><%= orchid.name %></h1>
               <small class="text-body-secondary">
-                <% for(let i = 0; i < 5; i++) { %>
-                <i
-                  class="fa-solid fa-star star-<%= orchid._id %>"
-                  onclick="rateOrchid('<%= i+1 %>', '<%= orchid._id %>')"
-                ></i>
-                <% } %>
-                <span>(109) Votes</span>
+                <% for(let i = 0; i < 5; i++) { %> <% if(i < averageRating) { %>
+                <i class="fa-solid fa-star checked"></i>
+                <% } else { %>
+                <i class="fa-solid fa-star"></i>
+                <% } %> <% } %>
+                <span>(<%= totalComments %>) Votes</span>
               </small>
             </div>
 

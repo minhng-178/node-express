@@ -30,8 +30,6 @@ export const addComment = async (
     const { slug } = req.params;
     const { ...commentData } = req.body;
 
-    console.log(commentData);
-
     const newComment = await createComment(commentData, slug);
 
     if (newComment) {

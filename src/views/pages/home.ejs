@@ -72,14 +72,21 @@
                           <i class="fa-solid fa-eye"></i> View
                         </a>
                       </div>
-                      <small class="text-body-secondary">
-                        <% for(let i = 0; i < 5; i++) { %>
-                        <i
-                          class="fa-solid fa-star star-<%= orchid._id %>"
-                          onclick="rateOrchid('<%= i+1 %>', '<%= orchid._id %>')"
-                        ></i>
-                        <% } %>
-                      </small>
+                      <div
+                        class="d-flex justify-content-between align-content-center"
+                      >
+                        <small class="text-body-secondary">
+                          <% for(let i = 0; i < 5; i++) { %> <% if(i <
+                          orchid.averageRating) { %>
+                          <i class="fa-solid fa-star checked"></i>
+                          <% } else { %>
+                          <i class="fa-solid fa-star"></i>
+                          <% } %> <% } %>
+                        </small>
+                        <small class="text-body-secondary"
+                          >(<%= orchid.totalComments %>)</small
+                        >
+                      </div>
                     </div>
                   </div>
                 </div>

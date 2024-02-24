@@ -1,13 +1,9 @@
 import moment from "moment";
 import express from "express";
+
 import { originalData } from "./orchids";
-import {
-  getOrchidById,
-  getOrchidBySlug,
-  getOrchids,
-  getTotalPages,
-} from "../models/orchids";
 import { getCategories } from "../models/category";
+import { getOrchidBySlug, getOrchids, getTotalPages } from "../models/orchids";
 
 export const getHomePage = async (
   req: express.Request,
@@ -16,15 +12,35 @@ export const getHomePage = async (
   const page = parseInt(req.query.page as string) || 1;
 
   const totalPages = await getTotalPages();
-  const orchids = await getOrchids(page);
-  const orchid = await getOrchidById(req.params.orchidId);
+  let orchids = await getOrchids(page);
 
   if (!orchids) {
     res.sendStatus(404);
   }
+
+  orchids = orchids.map((orchid) => {
+    let totalComments = 0;
+    let totalRating = 0;
+    if (orchid.comments) {
+      totalComments = orchid.comments.length;
+      totalRating = orchid.comments.reduce(
+        (total, comment) => total + comment.rating,
+        0
+      );
+    }
+
+    let averageRating =
+      totalComments > 0 ? Math.ceil(totalRating / totalComments) : 0;
+
+    return {
+      ...orchid.toObject(),
+      totalComments,
+      averageRating,
+    };
+  });
+
   res.render("pages/home", {
     orchids: orchids,
-    orchid: orchid,
     originalList: originalData,
     page: page,
     totalPages: totalPages,
@@ -60,11 +76,28 @@ export const getOrchidDetailPage = async (
   const categories = await getCategories();
 
   if (orchid) {
+    let totalComments = 0;
+    let totalRating = 0;
+    if (orchid.comments) {
+      totalComments = orchid.comments.length;
+      totalRating = orchid.comments.reduce(
+        (total, comment) => total + comment.rating,
+        0
+      );
+    }
+
+    let averageRating =
+      totalComments > 0 ? Math.ceil(totalRating / totalComments) : 0;
+
+    console.log(orchid.comments);
+
     res.render("pages/orchidDetail", {
       orchid: orchid,
       moment: moment,
       categoriesList: categories,
       originalList: originalData,
+      totalComments: totalComments,
+      averageRating: averageRating,
     });
   } else return res.status(403).end("No request found!");
 };

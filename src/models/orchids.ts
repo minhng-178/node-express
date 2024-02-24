@@ -48,6 +48,13 @@ export const getOrchids = (page = 1, name = "") => {
   const skip = (page - 1) * RESULTS_PER_PAGE;
   return Orchid.find({ name: new RegExp(name, "i") })
     .populate("category", "name")
+    .populate({
+      path: "comments",
+      populate: {
+        path: "author",
+        select: "avatar email",
+      },
+    })
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(RESULTS_PER_PAGE);
