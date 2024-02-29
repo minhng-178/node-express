@@ -1,0 +1,29 @@
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchTerm = urlParams.get("name") || "";
+
+  const searchOrchid = document.getElementById("searchOrchid");
+  searchOrchid.value = searchTerm;
+
+  const performSearch = () => {
+    const searchValue = searchOrchid.value;
+    window.location.href =
+      window.location.pathname + "?name=" + encodeURIComponent(searchValue);
+  };
+
+  document
+    .getElementById("searchButton")
+    .addEventListener("click", performSearch);
+
+  searchOrchid.addEventListener("keydown", function (event) {
+    if (event.keyCode === 13) {
+      event.preventDefault(); // Prevent form submission
+      performSearch();
+    }
+  });
+
+  document.getElementById("clearButton").addEventListener("click", function () {
+    searchOrchid.value = "";
+    window.location.href = window.location.pathname;
+  });
+</script>

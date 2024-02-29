@@ -10,7 +10,7 @@
             <div class="col-lg-6">
               <h4 class="text-center mb-3">Edit Player</h4>
               <div>
-                <form action="/orchids/<%= orchid._id %>?_method=PUT" method="POST" class="form-bordered">
+                <form action="/dashboard/orchids/<%= orchid._id %>?_method=PUT" method="POST" class="form-bordered">
                   <input type="hidden" name="_id" value="<%= orchid._id %>" />
                   <div class="mb-3">
                     <label for="orchidName" class="form-label">Orchid Name</label>
@@ -76,7 +76,7 @@
                       </button>
                     </div>
                     <div class="col">
-                      <a href="/orchids" class="btn btn-light w-100">Back</a>
+                      <a href="/dashboard/orchids" class="btn btn-light w-100">Back</a>
                     </div>
                   </div>
                 </form>

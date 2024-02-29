@@ -9,10 +9,39 @@ export const getHomePage = async (
   req: express.Request,
   res: express.Response
 ) => {
+  res.render("pages/home");
+};
+
+export const getAboutPage = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  res.render("pages/about");
+};
+
+export const getLoginPage = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  res.render("pages/login");
+};
+
+export const getError404Page = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  res.render("pages/404");
+};
+
+export const getOrchidGlobalPage = async (
+  req: express.Request,
+  res: express.Response
+) => {
   const page = parseInt(req.query.page as string) || 1;
+  const name = (req.query.name as string) || "";
 
   const totalPages = await getTotalPages();
-  let orchids = await getOrchids(page);
+  let orchids = await getOrchids(page, name);
 
   if (!orchids) {
     res.sendStatus(404);
@@ -39,33 +68,12 @@ export const getHomePage = async (
     };
   });
 
-  res.render("pages/home", {
+  res.render("pages/orchidsGlobal", {
     orchids: orchids,
     originalList: originalData,
     page: page,
     totalPages: totalPages,
   });
-};
-
-export const getAboutPage = async (
-  req: express.Request,
-  res: express.Response
-) => {
-  res.render("pages/about");
-};
-
-export const getLoginPage = async (
-  req: express.Request,
-  res: express.Response
-) => {
-  res.render("pages/login");
-};
-
-export const getError404Page = async (
-  req: express.Request,
-  res: express.Response
-) => {
-  res.render("pages/404");
 };
 
 export const getRegisterPage = async (

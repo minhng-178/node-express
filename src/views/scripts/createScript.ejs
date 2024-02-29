@@ -97,7 +97,7 @@
     const data = Object.fromEntries(formData);
 
     try {
-      const response = await fetch("/orchids", {
+      const response = await fetch("/dashboard/orchids", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -112,7 +112,7 @@
           title: "Success!",
           text: "Added successfully!",
         }).then(() => {
-          window.location.href = "/orchids";
+          window.location.href = "/dashboard/orchids";
         });
       } else {
         // Check the status code of the response

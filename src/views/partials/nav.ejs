@@ -32,12 +32,9 @@
       id="navbar"
     >
       <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
-      <% if (locals.user.isAdmin === true) { %>
-      <li><a href="/orchids" class="nav-link px-2 link-dark">Orchids</a></li>
       <li>
-        <a href="/users" class="nav-link px-2 link-dark">Users</a>
+        <a href="/orchids" class="nav-link px-2 link-dark">Orchids</a>
       </li>
-      <% } %>
       <li><a href="/about" class="nav-link px-2 link-dark">About</a></li>
     </ul>
     <% } %>

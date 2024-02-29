@@ -6,6 +6,7 @@ import {
   getHomePage,
   getLoginPage,
   getOrchidDetailPage,
+  getOrchidGlobalPage,
   getRegisterPage,
 } from "../controllers/global";
 
@@ -15,5 +16,6 @@ export default (router: express.Router) => {
   router.get("/login", getLoginPage);
   router.get("/register", getRegisterPage);
   router.get("/not-found", getError404Page);
-  router.get("/orchidDetail/:slug", getOrchidDetailPage);
+  router.get("/orchids", getOrchidGlobalPage),
+    router.get("/orchids/orchidDetail/:slug", getOrchidDetailPage);
 };

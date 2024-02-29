@@ -43,9 +43,17 @@ export const createComment = (values: Record<string, any>, slug: string) =>
       { new: true }
     ).then((orchid) => comment.toObject());
   });
-
-export const deleteCommentById = (id: string) =>
-  Comment.findOneAndDelete({ _id: id });
+export const deleteCommentById = async (id: string) => {
+  const comment = await Comment.findById(id);
+  if (!comment) {
+    throw new Error("Comment not found");
+  }
+  await Orchid.updateMany(
+    { comments: comment._id },
+    { $pull: { comments: comment._id } }
+  );
+  return Comment.deleteOne({ _id: id });
+};
 export const updateCommentById = (id: string, values: Record<string, any>) =>
   Comment.findByIdAndUpdate(id, values);
 export const deleteOldestComment = async () => {

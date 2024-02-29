@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 import slugify from "slugify";
-import { IComment } from "./comments";
+import { Comment, IComment } from "./comments";
 import { ICategory } from "./category";
 
 interface IOrchid extends Document {
@@ -43,7 +43,6 @@ export const Orchid = mongoose.model<IOrchid>("Orchid", OrchidSchema);
 
 //Orchids action
 const RESULTS_PER_PAGE = 6;
-
 export const getOrchids = (page = 1, name = "") => {
   const skip = (page - 1) * RESULTS_PER_PAGE;
   return Orchid.find({ name: new RegExp(name, "i") })
@@ -59,12 +58,10 @@ export const getOrchids = (page = 1, name = "") => {
     .skip(skip)
     .limit(RESULTS_PER_PAGE);
 };
-
 export const getTotalPages = async () => {
   const totalOrchids = await Orchid.countDocuments();
   return Math.ceil(totalOrchids / RESULTS_PER_PAGE);
 };
-
 export const getOrchidByName = (name: string) => Orchid.findOne({ name });
 export const getOrchidById = (id: string) => Orchid.findById(id);
 export const getOrchidBySlug = (slug: string) => {
@@ -80,15 +77,20 @@ export const getOrchidBySlug = (slug: string) => {
       return orchid.toObject();
     });
 };
-
 export const createOrchid = (values: Record<string, any>) => {
   const slug = slugify(values.name, { lower: true });
   return new Orchid({ ...values, slug })
     .save()
     .then((Orchid) => Orchid.toObject());
 };
-export const deleteOrchidById = (id: string) =>
-  Orchid.findOneAndDelete({ _id: id });
+export const deleteOrchidById = async (id: string) => {
+  const orchid = await Orchid.findById(id);
+  if (!orchid) {
+    throw new Error("Orchid not found");
+  }
+  await Comment.deleteMany({ _id: { $in: orchid.comments } });
+  return Orchid.deleteOne({ _id: id });
+};
 export const updateOrchidById = (id: string, values: Record<string, any>) => {
   if (values.name) {
     const slug = slugify(values.name, { lower: true });
@@ -96,7 +98,6 @@ export const updateOrchidById = (id: string, values: Record<string, any>) => {
   }
   return Orchid.findByIdAndUpdate(id, values);
 };
-
 export const deleteOldestOrchid = async () => {
   const oldestOrchid = await Orchid.findOne().sort("createdAt");
   if (!oldestOrchid) {

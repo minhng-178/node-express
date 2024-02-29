@@ -18,19 +18,19 @@ export default (router: express.Router) => {
   router.delete("/categories", isAuthenticated, isAdmin, deleteCategories);
   router.get("/categories/:categoryId", isAuthenticated, isAdmin, getCategory);
   router.post(
-    "/categories/:categoryId",
+    "/dashboard/categories/:categoryId",
     isAuthenticated,
     isAdmin,
     addCategoryWithId
   );
   router.put(
-    "/categories/:categoryId",
+    "/dashboard/categories/:categoryId",
     isAuthenticated,
     isAdmin,
     updateCategory
   );
   router.delete(
-    "/categories/:categoryId",
+    "/dashboard/categories/:categoryId",
     isAuthenticated,
     isAdmin,
     deleteCategory

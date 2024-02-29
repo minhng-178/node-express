@@ -2,18 +2,28 @@
   const urlParams = new URLSearchParams(window.location.search);
   const searchTerm = urlParams.get("name") || "";
 
-  document.getElementById("searchOrchid").value = searchTerm;
+  const searchOrchid = document.getElementById("searchOrchid");
+  searchOrchid.value = searchTerm;
+
+  const performSearch = () => {
+    const searchValue = searchOrchid.value;
+    window.location.href =
+      window.location.pathname + "?name=" + encodeURIComponent(searchValue);
+  };
 
   document
     .getElementById("searchButton")
-    .addEventListener("click", function () {
-      const searchValue = document.getElementById("searchOrchid").value;
-      window.location.href =
-        window.location.pathname + "?name=" + encodeURIComponent(searchValue);
-    });
+    .addEventListener("click", performSearch);
+
+  searchOrchid.addEventListener("keydown", function (event) {
+    if (event.keyCode === 13) {
+      event.preventDefault(); // Prevent form submission
+      performSearch();
+    }
+  });
 
   document.getElementById("clearButton").addEventListener("click", function () {
-    document.getElementById("searchOrchid").value = "";
+    searchOrchid.value = "";
     window.location.href = window.location.pathname;
   });
 
@@ -39,7 +49,7 @@
           );
           const data = Object.fromEntries(formData);
 
-          fetch(`/orchids/${orchidId}?_method=DELETE`, {
+          fetch(`/dashboard/orchids/${orchidId}?_method=DELETE`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

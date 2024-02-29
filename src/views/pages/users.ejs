@@ -10,7 +10,7 @@
             <div class="text-center mb-3">
               <h4 class="section-title">User List</h4>
             </div>
-            <div class="row mb-3">
+            <div class="row mb-3 justify-content-end">
               <div class="col-md-6">
                 <div class="input-group">
                   <input
@@ -72,13 +72,15 @@
               <nav aria-label="Page navigation">
                 <ul class="pagination">
                   <li class="page-item <%= page === 1 ? 'disabled' : '' %>">
-                    <a class="page-link" href="/orchids?page=<%= page - 1 %>"
+                    <a
+                      class="page-link"
+                      href="/dashboard/users?page=<%= page - 1 %>"
                       >Previous</a
                     >
                   </li>
                   <% for(let i = 1; i <= totalPages; i++) { %>
                   <li class="page-item <%= page === i ? 'active' : '' %>">
-                    <a class="page-link" href="/orchids?page=<%= i %>"
+                    <a class="page-link" href="/dashboard/users?page=<%= i %>"
                       ><%= i %></a
                     >
                   </li>
@@ -86,7 +88,9 @@
                   <li
                     class="page-item <%= page === totalPages ? 'disabled' : '' %>"
                   >
-                    <a class="page-link" href="/orchids?page=<%= page + 1 %>"
+                    <a
+                      class="page-link"
+                      href="/dashboard/users?page=<%= page + 1 %>"
                       >Next</a
                     >
                   </li>
@@ -102,25 +106,34 @@
       const urlParams = new URLSearchParams(window.location.search);
       const searchTerm = urlParams.get("name") || "";
 
-      document.getElementById("searchUser").value = searchTerm;
+      const searchOrchid = document.getElementById("searchUser");
+      searchOrchid.value = searchTerm;
+
+      const performSearch = () => {
+        const searchValue = searchOrchid.value;
+        window.location.href =
+          window.location.pathname + "?name=" + encodeURIComponent(searchValue);
+      };
 
       document
         .getElementById("searchButton")
-        .addEventListener("click", function () {
-          const searchValue = document.getElementById("searchUser").value;
-          window.location.href =
-            window.location.pathname +
-            "?name=" +
-            encodeURIComponent(searchValue);
-        });
+        .addEventListener("click", performSearch);
+
+      searchOrchid.addEventListener("keydown", function (event) {
+        if (event.keyCode === 13) {
+          event.preventDefault(); // Prevent form submission
+          performSearch();
+        }
+      });
 
       document
         .getElementById("clearButton")
         .addEventListener("click", function () {
-          document.getElementById("searchUser").value = "";
+          searchOrchid.value = "";
           window.location.href = window.location.pathname;
         });
     </script>
+
     <%-include('../scripts/globalScript')-%>
   </body>
 </html>
