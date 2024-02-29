@@ -1,12 +1,36 @@
 <script>
-  const picker = document.querySelector("emoji-picker");
-  const textarea = document.querySelector("#comment");
   let stars = document.getElementsByClassName("star");
   let output = document.getElementById("output");
   let rating = 0;
 
+  const picker = document.querySelector("emoji-picker");
+  const textarea = document.querySelector("#comment");
+  const charCount = document.querySelector("#charCount");
+  const maxCount = 200;
+
   picker.addEventListener("emoji-click", (event) => {
-    textarea.value += event.detail.unicode;
+    if ((textarea.value + event.detail.unicode).length > maxCount) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Your comment cannot exceed 200 characters!",
+      });
+    } else {
+      textarea.value += event.detail.unicode;
+      charCount.textContent = textarea.value.length;
+    }
+  });
+
+  textarea.addEventListener("input", function () {
+    if (textarea.value.length > maxCount) {
+      textarea.value = textarea.value.substring(0, maxCount);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Your comment cannot exceed 200 characters!",
+      });
+    }
+    charCount.textContent = textarea.value.length;
   });
 
   const Toast = Swal.mixin({
@@ -112,8 +136,6 @@
           body: JSON.stringify(data),
         }
       );
-
-      console.log(response.body);
 
       if (response.ok) {
         Swal.fire({
