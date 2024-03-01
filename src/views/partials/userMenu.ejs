@@ -19,22 +19,25 @@
     </li>
     <li>
       <a class="dropdown-item" href="/users/me/<%= locals.user.slug %>"
-        >Profile</a
+        ><i class="fa-solid fa-user"></i> Profile</a
       >
     </li>
     <% if (locals.user.isAdmin === true) { %>
-    <li>
-      <a href="/dashboard/orchids" class="dropdown-item">Orchids</a>
-    </li>
-    <li>
-      <a href="/dashboard/users" class="dropdown-item">Users</a>
+    <li class="dropdown-submenu">
+      <a class="dropdown-item dropdown-toggle" href="#"
+        ><i class="fa-solid fa-table"></i> Dashboard</a
+      >
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="/dashboard/orchids">Orchids</a></li>
+        <li><a class="dropdown-item" href="/dashboard/users">Users</a></li>
+      </ul>
     </li>
     <% } %>
     <li><hr class="dropdown-divider" /></li>
     <li>
       <form action="/auth/logout" method="get">
         <button type="submit" id="logoutButton" class="dropdown-item">
-          Logout
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
         </button>
       </form>
     </li>
